@@ -129,39 +129,56 @@ def create_app(test_config=None):
         flash('Comment added successfully.')
         return redirect(url_for('published_posts'))
 
+
     @app.route('/post/<int:id>/like', methods=['POST'])
     @login_required
     def toggle_like(id):
+        print("\n========== LIKE DEBUG START ==========")
+        print("Route reached!")
+        print("Post ID:", id)
+        print("Logged-in user ID:", current_user.id)
+
         post = db.session.get(Post, id)
 
-        # Only allow likes on active, published posts.
-        if post is None or not post.published or post.status != "Active":
+        if post is None:
+            print("ERROR: Post not found.")
             abort(404)
 
-        # Check whether the current user already liked this post.
+        if not post.published or post.status != "Active":
+            print("ERROR: Post is not published and active.")
+            abort(404)
+
         existing_like = Like.query.filter_by(
             post_id=post.id,
             user_id=current_user.id
         ).first()
 
-        if existing_like:
-            # The user already liked it, so remove the like.
-            db.session.delete(existing_like)
-            # flash('Like removed.')
-        else:
-            # The user has not liked it, so add a like.
-            new_like = Like(
-                post_id=post.id,
-                user_id=current_user.id
-            )
-            db.session.add(new_like)
-            # flash('You liked this post.')
-
         try:
+            if existing_like:
+                print("Action: Removing existing like.")
+                db.session.delete(existing_like)
+            else:
+                print("Action: Adding new like.")
+                new_like = Like(
+                    post_id=post.id,
+                    user_id=current_user.id
+                )
+                db.session.add(new_like)
+
             db.session.commit()
-        except IntegrityError:
+            print("Database commit completed.")
+
+            total_likes = Like.query.filter_by(
+                post_id=post.id
+            ).count()
+
+            print("Total likes after commit:", total_likes)
+            print("========== LIKE DEBUG END ==========\n")
+
+        except Exception as error:
             db.session.rollback()
-            # flash('Your like could not be saved. Please try again.')
+            print("LIKE ERROR:", repr(error))
+            raise
 
         return redirect(url_for('published_posts'))
 
