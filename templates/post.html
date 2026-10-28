@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Posts</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='post.css') }}">
+</head>
+<body class="post-details-page">
+        <table>
+            <tr>
+                <!-- <th>ID</th> -->
+                <th>Post Title</th>
+                <th>Post Description</th>
+                <th>Date & Time</th>
+                <th>Uploaded File</th>                
+            </tr>
+            <tr>
+                <td>{{post.title}}</td>
+                <td>{{post.description}}</td>
+                <td>{{post.date}}</td>
+                <td>{{post.upload}}</td>
+            </tr>
+        </table>
+<br>
+<br>
+
+<a href="{{ url_for('home') }}" class="logout-btn">Go Home</a>
+
+</body>
+</html>

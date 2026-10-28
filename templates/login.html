@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}">
+</head>
+<body class="auth-page">
+    <h1>Login</h1>
+
+    {% if error %}
+        <p class="auth-message auth-error">{{ error }}</p>
+    {% endif %}
+
+    {% if welcome %}
+        <p class="auth-message auth-success">{{ welcome }}</p>
+    {% endif %}
+
+    <form method="POST">
+    
+        <label for="username">Username:</label>
+    
+        <input type="text" id="username" name="username" placeholder="Enter your username" required>
+        <br>
+    
+        <label for="password">Password:</label>
+    
+        <div class="password-wrapper">
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            <span id="togglePassword" class="toggle-icon">👁️</span>
+        </div>
+        <br>
+    
+        <p>Don't have an account? <a href="{{ url_for('signup') }}">Sign Up</a> </p>
+    
+        <button type="submit">Login</button>
+    </form>
+    
+    <script>
+        const toggle = document.getElementById('togglePassword');
+        const passwordField = document.getElementById('password');
+
+        toggle.addEventListener('click', () => {
+            const isHidden = passwordField.type === 'password';
+            passwordField.type = isHidden ? 'text' : 'password';
+            toggle.textContent = isHidden ? '🙈' : '👁️';
+        });
+    </script>
+</body>
+</html>

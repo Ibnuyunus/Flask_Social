@@ -1,0 +1,310 @@
+
+/* =========================================
+   POSTLOG AUTHENTICATION STYLES
+   Login, signup and account-created message
+   File: static/auth.css
+   ========================================= */
+
+.auth-page {
+    --auth-primary: #4f46e5;
+    --auth-primary-hover: #4338ca;
+    --auth-text: #172033;
+    --auth-muted: #6b7280;
+    --auth-border: #e1e5ee;
+    --auth-background: #f4f6fc;
+
+    min-height: 100vh;
+    margin: 0;
+    padding: 40px 18px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        radial-gradient(circle at top left, #e8e7ff 0, transparent 35%),
+        var(--auth-background);
+
+    color: var(--auth-text);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.auth-page *,
+.auth-page *::before,
+.auth-page *::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    width: 100%;
+    min-height: 100%;
+}
+
+.auth-page {
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+.auth-page *,
+.auth-page *::before,
+.auth-page *::after {
+    box-sizing: border-box;
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 40px 16px;
+}
+
+.auth-card {
+    width: 100%;
+    min-width: 0;
+    padding: 28px;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 10px 30px rgb(15 23 42 / 6%);
+}
+
+@media (max-width: 480px) {
+    .auth-card {
+        padding: 20px;
+    }
+}
+
+/* Page heading */
+
+.auth-page > h1 {
+    width: 100%;
+    max-width: 460px;
+    margin: 0 auto 20px;
+
+    color: var(--auth-text);
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.8px;
+    text-align: center;
+}
+
+/* Authentication form */
+
+.auth-page > form {
+    width: 100%;
+    max-width: 460px;
+    padding: 32px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+
+    background: #ffffff;
+    border: 1px solid var(--auth-border);
+    border-radius: 18px;
+    box-shadow: 0 18px 50px rgba(31, 41, 55, 0.09);
+}
+
+/* Labels */
+
+.auth-page form > label {
+    margin-top: 5px;
+
+    color: #374151;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+/* Text, email and password inputs */
+
+.auth-page form input[type="text"],
+.auth-page form input[type="email"],
+.auth-page form input[type="password"] {
+    width: 100%;
+    min-width: 0;
+    min-height: 48px;
+    padding: 12px 14px;
+
+    color: var(--auth-text);
+    background: #ffffff;
+    border: 1px solid #d5dbe7;
+    border-radius: 10px;
+
+    font: inherit;
+    outline: none;
+
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.auth-page form input::placeholder {
+    color: #9aa3b2;
+}
+
+.auth-page form input[type="text"]:focus,
+.auth-page form input[type="email"]:focus,
+.auth-page form input[type="password"]:focus {
+    border-color: var(--auth-primary);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+}
+
+/* Password field and visibility toggle */
+
+.auth-page .password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.auth-page .password-wrapper input[type="password"],
+.auth-page .password-wrapper input[type="text"] {
+    padding-right: 54px;
+}
+
+.auth-page .toggle-icon {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 30px;
+    height: 36px;
+
+    font-size: 1.1rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Remove default breaks used for spacing */
+
+.auth-page form > br {
+    display: none;
+}
+
+/* Signup/login navigation text */
+
+.auth-page form > p {
+    margin: 8px 0;
+    color: var(--auth-muted);
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.auth-page form a {
+    color: var(--auth-primary);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.auth-page form a:hover {
+    color: var(--auth-primary-hover);
+    text-decoration: underline;
+}
+
+/* Submit button */
+
+.auth-page form button[type="submit"] {
+    width: 100%;
+    min-height: 49px;
+    margin-top: 5px;
+    padding: 12px 18px;
+
+    color: #ffffff;
+    background: var(--auth-primary);
+    border: none;
+    border-radius: 10px;
+
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+
+    box-shadow: 0 5px 14px rgba(79, 70, 229, 0.2);
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.auth-page form button[type="submit"]:hover {
+    background: var(--auth-primary-hover);
+    transform: translateY(-1px);
+}
+
+.auth-page form button[type="submit"]:active {
+    transform: translateY(0);
+}
+
+/* Error message */
+
+.auth-page .auth-message {
+    width: 100%;
+    max-width: 460px;
+    margin: 0 auto 14px;
+    padding: 12px 15px;
+
+    border: 1px solid transparent;
+    border-radius: 10px;
+
+    font-size: 0.9rem;
+    overflow-wrap: anywhere;
+}
+
+.auth-page .auth-error {
+    color: #b42318;
+    background: #fff0ef;
+    border-color: #ffd1cd;
+}
+
+/* Successful account creation */
+
+.auth-page .auth-success {
+    color: #166534;
+    background: #ecfdf3;
+    border-color: #bbf7d0;
+}
+
+/* Accessible keyboard focus */
+
+.auth-page a:focus-visible,
+.auth-page button:focus-visible,
+.auth-page input:focus-visible,
+.auth-page .toggle-icon:focus-visible {
+    outline: 3px solid rgba(79, 70, 229, 0.3);
+    outline-offset: 3px;
+}
+
+/* Mobile layout */
+
+@media (max-width: 520px) {
+    .auth-page {
+        padding: 26px 14px;
+    }
+
+    .auth-page > h1 {
+        font-size: 1.7rem;
+        margin-bottom: 16px;
+    }
+
+    .auth-page > form {
+        padding: 24px 19px;
+        border-radius: 14px;
+    }
+}
+
+/* Respect reduced-motion preferences */
+
+@media (prefers-reduced-motion: reduce) {
+    .auth-page *,
+    .auth-page *::before,
+    .auth-page *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
+}

@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Published Posts | PostLog</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='published.css') }}">
+</head>
+
+<body class="published-page">
+
+    <header class="pub-header">
+        <a href="{{ url_for('home') }}" class="pub-brand">
+            <span class="pub-brand-icon">P</span>
+            <span>PostLog</span>
+        </a>
+
+        <nav class="pub-nav">
+            <a href="{{ url_for('home') }}" class="pub-nav-link">My Posts</a>
+            <span class="pub-current-page">Published Feed</span>
+        </nav>
+    </header>
+
+    <main class="pub-main">
+
+        <section class="pub-intro">
+            <span class="pub-eyebrow">THE COMMUNITY FEED</span>
+            <h1>Published Posts</h1>
+            <p>Discover posts, explore ideas, and join the conversation.</p>
+        </section>
+
+        <section class="pub-feed">
+
+            {% for post, author in rows %}
+
+                <article class="pub-post-card">
+
+                    <!-- Post header -->
+                    <div class="pub-post-header">
+                        <div class="pub-avatar">
+                            {{ (author.Username or 'U')[0]|upper }}
+                        </div>
+
+                        <div class="pub-author-info">
+                            <h2>{{ post.title }}</h2>
+                            <p class="pub-author-name">
+                                @{{ author.Username }}
+                            </p>
+                        </div>
+
+                        {% if post.user_id == current_user.id %}
+                            <a href="{{ url_for('edit', id=post.id) }}"
+                               class="pub-edit-link">
+                                Edit post
+                            </a>
+                        {% endif %}
+                    </div>
+
+                    <!-- Post content -->
+                    <div class="pub-post-content">
+                        <p class="pub-description">{{ post.description }}</p>
+
+                        {% if post.upload %}
+                            <div class="pub-media">
+                                {% set extension = post.upload.rsplit('.', 1)[-1].lower() %}
+
+                                {% if extension in ['png', 'jpg', 'jpeg', 'gif'] %}
+                                    <img
+                                        src="{{ url_for('uploaded_file', filename=post.upload) }}"
+                                        alt="Image attached to {{ post.title }}"
+                                        loading="lazy">
+                                {% else %}
+                                    <a class="pub-attachment"
+                                       href="{{ url_for('uploaded_file', filename=post.upload) }}"
+                                       target="_blank"
+                                       rel="noopener noreferrer">
+                                        <span class="pub-file-icon">FILE</span>
+                                        <span>
+                                            <strong>View attachment</strong>
+                                            <small>{{ post.upload }}</small>
+                                        </span>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Post date -->
+                    <div class="pub-post-meta">
+                        <span class="pub-published-label">
+                            <span class="pub-status-dot"></span>
+                            Published
+                        </span>
+
+                        <span class="pub-post-date">{{ post.date }}</span>
+                    </div>
+
+
+                    <div class="pub-like-section">
+
+                    <form method="POST"
+                        action="{{ url_for('toggle_like', id=post.id) }}">
+
+                        {% if post.id in liked_post_ids %}
+                            <button type="submit" class="pub-like-btn pub-liked">
+                                ♥ Unlike
+                            </button>
+                        {% else %}
+                            <button type="submit" class="pub-like-btn">
+                                ♡ Like
+                            </button>
+                        {% endif %}
+
+                    </form>
+
+                    <span class="pub-like-count">
+                        {{ like_counts.get(post.id, 0) }}
+                        {% if like_counts.get(post.id, 0) == 1 %}
+                            like
+                        {% else %}
+                            likes
+                        {% endif %}
+                    </span>
+
+                    </div>
+
+                    <!-- Comments -->
+                    <section class="pub-comments">
+
+                        {% set post_comments = comments
+                            | selectattr('post_id', 'equalto', post.id)
+                            | list %}
+
+                        <div class="pub-comments-heading">
+                            <h3>Comments</h3>
+                            <span class="pub-comment-count">
+                                {{ post_comments|length }}
+                            </span>
+                        </div>
+
+                        <div class="pub-comment-list">
+
+                            {% for comment in post_comments %}
+
+                                <div class="pub-comment">
+                                    <div class="pub-comment-avatar">
+                                        {{ (comment_usernames.get(comment.user_id, 'Unknown user'))[0]|upper }}
+                                    </div>
+
+                                    <div class="pub-comment-body">
+                                        <strong class="pub-comment-author">
+                                            {{ comment_usernames.get(comment.user_id, 'Unknown user') }}
+                                        </strong>
+
+                                        <p>{{ comment.content }}</p>
+
+                                        <small>{{ comment.date }}</small>
+                                    </div>
+                                </div>
+
+                            {% else %}
+
+                                <p class="pub-no-comments">
+                                    No comments yet. Start the conversation!
+                                </p>
+
+                            {% endfor %}
+
+                        </div>
+
+                        <!-- Comment form -->
+                        <form class="pub-comment-form"
+                              method="POST"
+                              action="{{ url_for('add_comment', id=post.id) }}">
+
+                            <input type="hidden" name="return_to" value="published">
+
+                            <input
+                                type="text"
+                                name="content"
+                                maxlength="2000"
+                                placeholder="Write a comment..."
+                                aria-label="Write a comment"
+                                required>
+
+                            <button type="submit">Comment</button>
+                        </form>
+
+                    </section>
+
+                </article>
+
+            {% else %}
+
+                <div class="pub-empty-state">
+                    <div class="pub-empty-icon">P</div>
+                    <h2>No published posts yet</h2>
+                    <p>When posts are published, they will appear here.</p>
+                    <a href="{{ url_for('home') }}">Go to My Posts</a>
+                </div>
+
+            {% endfor %}
+
+        </section>
+
+    </main>
+
+    <footer class="pub-footer">
+        <p>PostLog &copy; 2026 · Share your ideas.</p>
+    </footer>
+
+</body>
+</html>

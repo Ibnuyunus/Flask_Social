@@ -1,0 +1,194 @@
+
+/* =========================================
+   POSTLOG — POST DETAILS PAGE
+   File: static/post.css
+   ========================================= */
+
+.post-details-page {
+    --post-primary: #4f46e5;
+    --post-primary-hover: #4338ca;
+    --post-bg: #f5f7fb;
+    --post-surface: #ffffff;
+    --post-text: #172033;
+    --post-muted: #687386;
+    --post-border: #e2e7f0;
+
+    min-height: 100vh;
+    margin: 0;
+    padding: 60px 5%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    background:
+        radial-gradient(circle at top left, #e9e8ff 0, transparent 32%),
+        var(--post-bg);
+
+    color: var(--post-text);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.post-details-page *,
+.post-details-page *::before,
+.post-details-page *::after {
+    box-sizing: border-box;
+}
+
+/* Post details table */
+
+.post-details-page table {
+    width: 100%;
+    max-width: 1100px;
+    margin: 30px auto 22px;
+
+    background: var(--post-surface);
+    border: 1px solid var(--post-border);
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 16px;
+    overflow: hidden;
+
+    box-shadow: 0 12px 35px rgba(31, 41, 55, 0.07);
+}
+
+/* Table headings */
+
+.post-details-page th {
+    padding: 18px 20px;
+
+    color: #ffffff;
+    background: var(--post-primary);
+
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-align: left;
+    letter-spacing: 0.3px;
+}
+
+/* Table content */
+
+.post-details-page td {
+    padding: 23px 20px;
+    vertical-align: top;
+
+    color: var(--post-text);
+    background: #ffffff;
+    border-bottom: 1px solid var(--post-border);
+
+    font-size: 0.93rem;
+    overflow-wrap: anywhere;
+}
+
+.post-details-page tbody tr:last-child td,
+.post-details-page table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Alternate emphasis for the post details row */
+
+.post-details-page td:first-child {
+    font-weight: 700;
+}
+
+.post-details-page td:nth-child(2) {
+    min-width: 180px;
+    white-space: pre-wrap;
+}
+
+.post-details-page td:nth-child(3) {
+    min-width: 150px;
+    color: var(--post-muted);
+    font-size: 0.86rem;
+}
+
+/* Go Home link */
+
+.post-details-page .logout-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 46px;
+    padding: 11px 22px;
+    margin-top: 4px;
+
+    color: #ffffff;
+    background: var(--post-primary);
+    border: 1px solid var(--post-primary);
+    border-radius: 10px;
+
+    font-size: 0.92rem;
+    font-weight: 700;
+    text-decoration: none;
+
+    box-shadow: 0 5px 13px rgba(79, 70, 229, 0.16);
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.post-details-page .logout-btn:hover {
+    color: #ffffff;
+    background: var(--post-primary-hover);
+    transform: translateY(-1px);
+}
+
+.post-details-page .logout-btn:focus-visible {
+    outline: 3px solid rgba(79, 70, 229, 0.3);
+    outline-offset: 3px;
+}
+
+/* Tablet and mobile layout */
+
+@media (max-width: 800px) {
+    .post-details-page {
+        padding: 35px 4%;
+        align-items: stretch;
+    }
+
+    .post-details-page table {
+        margin-top: 18px;
+        display: block;
+        max-width: 100%;
+        overflow-x: auto;
+        border-radius: 12px;
+    }
+
+    .post-details-page th,
+    .post-details-page td {
+        padding: 14px;
+        min-width: 130px;
+    }
+
+    .post-details-page td:nth-child(2) {
+        min-width: 190px;
+    }
+}
+
+@media (max-width: 480px) {
+    .post-details-page {
+        padding: 24px 12px;
+        font-size: 14px;
+    }
+
+    .post-details-page th,
+    .post-details-page td {
+        padding: 12px;
+        font-size: 0.82rem;
+    }
+
+    .post-details-page .logout-btn {
+        width: 100%;
+    }
+}
+
+/* Reduced motion */
+
+@media (prefers-reduced-motion: reduce) {
+    .post-details-page *,
+    .post-details-page *::before,
+    .post-details-page *::after {
+        transition-duration: 0.01ms !important;
+    }
+}

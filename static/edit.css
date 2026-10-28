@@ -1,0 +1,165 @@
+
+/* ========================================
+   POSTLOG — EDIT POST PAGE
+   File: static/edit.css
+   ======================================== */
+
+.post-edit-page {
+    min-height: 100vh;
+    padding: 48px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+}
+
+/* Edit form container */
+.post-edit-page form {
+    width: 100%;
+    max-width: 560px;
+    padding: 36px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+
+    background: var(--surface, #ffffff);
+    border: 1px solid var(--border, #e5e7eb);
+    border-radius: 18px;
+    box-shadow: 0 12px 36px rgba(15, 23, 42, 0.08);
+}
+
+/* Current file information */
+.post-edit-page > label {
+    width: 100%;
+    max-width: 560px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text, #1f2937);
+}
+
+.post-edit-page form > label {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text, #374151);
+}
+
+/* Text inputs */
+.post-edit-page input[type="text"] {
+    width: 100%;
+    min-height: 46px;
+    padding: 12px 14px;
+
+    font: inherit;
+    font-size: 0.95rem;
+    color: var(--text, #111827);
+    background: var(--input-bg, #ffffff);
+
+    border: 1px solid var(--border, #d1d5db);
+    border-radius: 10px;
+    outline: none;
+
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+}
+
+.post-edit-page input[type="text"]:focus {
+    border-color: var(--primary, #4f46e5);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.13);
+}
+
+/* File upload */
+.post-edit-page input[type="file"] {
+    width: 100%;
+    padding: 12px;
+    font: inherit;
+    font-size: 0.9rem;
+
+    background: var(--input-bg, #f9fafb);
+    border: 1px dashed var(--border, #cbd5e1);
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+.post-edit-page input[type="file"]::file-selector-button {
+    margin-right: 12px;
+    padding: 9px 12px;
+
+    font: inherit;
+    font-weight: 600;
+    color: var(--text, #374151);
+
+    background: var(--surface, #ffffff);
+    border: 1px solid var(--border, #d1d5db);
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+/* Update button */
+.post-edit-page input[type="submit"] {
+    width: 100%;
+    min-height: 46px;
+    margin-top: 12px;
+    padding: 12px 18px;
+
+    font: inherit;
+    font-weight: 700;
+    color: #ffffff;
+
+    background: var(--primary, #4f46e5);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.post-edit-page input[type="submit"]:hover {
+    background: var(--primary-hover, #4338ca);
+}
+
+.post-edit-page input[type="submit"]:active {
+    transform: scale(0.99);
+}
+
+/* Go Home link */
+.post-edit-page .logout-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 44px;
+    padding: 10px 16px;
+    margin-top: 0;
+
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+
+    color: var(--text, #374151);
+    background: var(--surface, #ffffff);
+    border: 1px solid var(--border, #d1d5db);
+    border-radius: 10px;
+
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.post-edit-page .logout-btn:hover {
+    background: var(--hover-bg, #f3f4f6);
+    border-color: var(--primary, #4f46e5);
+}
+
+/* Smaller screens */
+@media (max-width: 600px) {
+    .post-edit-page {
+        padding: 28px 14px;
+    }
+
+    .post-edit-page form {
+        padding: 24px 18px;
+        border-radius: 14px;
+    }
+}

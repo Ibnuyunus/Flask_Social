@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | PostLog</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}">
+</head>
+<body class="auth-page">
+    <div class="table-wrapper">
+        <table>
+            <tr>
+                <th>Id</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Username</th>
+                <th>Password</th>
+                <th>Email</th>
+                <th>Date & Time</th>
+            </tr>
+        {%-for row in eventsList-%}
+            <tr>
+                <td>{{row.id}}</td>
+                <td>{{row.Firstname}}</td>
+                <td>{{row.Lastname}}</td>
+                <td>{{row.Username}}</td>
+                <td class="hash-cell">{{row.Password}}</td>
+                <td>{{row.Email}}</td>
+                <td>{{row.date}}</td>
+            </tr>
+        {%-endfor-%}
+        </table>
+    </div>
+    <h1>Sign Up</h1>
+    <form method="POST">
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" placeholder="Enter your first name" name="firstName" required>
+        <br>
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" placeholder="Enter your last name" name="lastName" required>
+        <br>
+        <label for="username">Username:</label>
+        <input type="text" id="userName" placeholder="Enter your username" name="userName" required>
+        <br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" placeholder="Enter your email" name="email" required>
+        <br>
+        <label for="password">Password:</label>
+        <div class="password-wrapper">
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            <span id="togglePassword" class="toggle-icon">👁️</span>
+        </div>
+        <br>
+        <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+        <button type="submit">Sign Up</button>
+    </form>
+
+    <script>
+        const toggle = document.getElementById('togglePassword');
+        const passwordField = document.getElementById('password');
+
+        toggle.addEventListener('click', () => {
+            const isHidden = passwordField.type === 'password';
+            passwordField.type = isHidden ? 'text' : 'password';
+            toggle.textContent = isHidden ? '🙈' : '👁️';
+        });
+    </script>
+</body>
+</html>
