@@ -76,12 +76,16 @@ def create_app(test_config=None):
         user_id = mapped_column( db.Integer, db.ForeignKey('user.id'), nullable=False)
         date = mapped_column(db.String)
    
+
     class Like(db.Model):
+        __tablename__ = 'post_like'
+        
         id = mapped_column(db.Integer, primary_key=True)
-        post_id = mapped_column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+        post_id = mapped_column( db.Integer, db.ForeignKey('post.id'), nullable=False)
+
         user_id = mapped_column( db.Integer, db.ForeignKey('user.id'), nullable=False)
+
         __table_args__ = ( db.UniqueConstraint( 'post_id', 'user_id', name='unique_user_like_per_post'),)
-        # like = mapped_column(db.String, nullable=False)
 
 
     @login_manager.user_loader
