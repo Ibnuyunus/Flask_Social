@@ -420,7 +420,9 @@ def create_app(test_config=None):
     def logout():
         logout_user()
         return redirect(url_for('login'))
-
+    
+    with app.app_context():
+        db.create_all()
 
     return app
 
