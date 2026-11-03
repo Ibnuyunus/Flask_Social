@@ -25,7 +25,10 @@
 
         <nav class="dash-nav">
             <a href="{{ url_for('home') }}" class="active">My Dashboard</a>
+            <a href="{{ url_for('profile', username=current_user.Username) }}">My Profile</a>
             <a href="{{ url_for('published_posts') }}">Published Feed</a>
+            <a href="{{ url_for('notifications') }}" class="pub-nav-link">Notifications</a>
+            <a href="{{ url_for('people') }}">Discover People</a>
             <a href="{{ url_for('logout') }}" class="dash-logout">Logout</a>
         </nav>
     </header>
@@ -252,7 +255,7 @@
         </section>
 
         <footer class="dash-footer">
-            <p>© PostLog · Your space to create and share.</p>
+            <p>© EventLog · Your space to create and share.</p>
         </footer>
 
     </main>

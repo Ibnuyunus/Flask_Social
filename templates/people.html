@@ -1,0 +1,146 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover People - EventLog</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='people.css') }}">
+</head>
+<body>
+
+    <div class="page-container">
+
+        <!-- Navigation -->
+
+        <nav class="top-nav">
+            <a href="{{ url_for('dashboard') }}" class="brand">
+                Event<span>Log</span>
+            </a>
+
+            <div class="nav-links">
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+
+                <a href="{{ url_for('published_posts') }}">Explore</a>
+
+                <a href="{{ url_for('people') }}" class="active">People</a>
+
+                <a href="{{ url_for('profile', username=current_user.Username) }}">
+                    My Profile
+                </a>
+
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </nav>
+
+        <!-- Page Heading -->
+        <header class="page-header">
+            <div>
+                <p class="eyebrow">YOUR COMMUNITY</p>
+                <h1>Discover People</h1>
+                <p class="subtitle">
+                    Find people, connect with them and explore what they're sharing.
+                </p>
+            </div>
+        </header>
+
+        <!-- Search Section -->
+        <section class="search-section">
+            <form method="GET" action="{{ url_for('people') }}" class="search-form">
+                <span class="search-icon">⌕</span>
+
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="Search by name or username..."
+                    value="{{ search }}"
+                >
+
+                <button type="submit">Search</button>
+            </form>
+        </section>
+
+        <!-- People Section -->
+        <main class="people-section">
+
+            <div class="section-heading">
+                <div>
+                    <h2>People you may know</h2>
+                    <p>Discover other members of EventLog.</p>
+                </div>
+                <span class="people-count">{{ all_users|length }} people</span>
+            </div>
+
+            <div class="people-grid">
+
+                {% for person in all_users %}
+
+                    <article class="person-card">
+
+                        <div class="person-avatar">
+                            {{ person.Firstname[0]|upper if person.Firstname else 'U' }}
+                        </div>
+
+                        <div class="person-info">
+                            <h3>
+                                {{ person.Firstname }} {{ person.Lastname }}
+                            </h3>
+
+                            <a href="{{ url_for('profile', username=person.Username) }}" class="username">
+                                @{{ person.Username }}
+                            </a>
+                        </div>
+
+                        <a href="{{ url_for('profile', username=person.Username) }}"
+                           class="view-profile">
+                            View Profile
+                        </a>
+
+                        <form
+                            method="POST"
+                            action="{{ url_for('toggle_follow', user_id=person.id) }}"
+                            class="follow-form"
+                        >
+                            <input type="hidden" name="return_to" value="people">
+
+                            {% if person.id in following_ids %}
+                                <button type="submit" class="follow-btn following">
+                                    Following
+                                </button>
+                            {% else %}
+                                <button type="submit" class="follow-btn">
+                                    + Follow
+                                </button>
+                            {% endif %}
+                        </form>
+
+                    </article>
+
+                {% else %}
+
+                    <div class="empty-state">
+                        <div class="empty-icon">⌕</div>
+                        <h3>No people found</h3>
+                        <p>
+                            {% if search %}
+                                We couldn't find anyone matching "{{ search }}".
+                                Try searching with another name or username.
+                            {% else %}
+                                There are no other users to display yet.
+                            {% endif %}
+                        </p>
+                    </div>
+
+                {% endfor %}
+
+            </div>
+        </main>
+
+        <footer class="page-footer">
+            <p>© EventLog. Connect, share and discover.</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>

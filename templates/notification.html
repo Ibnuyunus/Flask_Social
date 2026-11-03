@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications | EventLog</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='notification.css') }}">
+</head>
+
+<body class="notifications-page">
+
+    <header class="pub-header">
+        <a href="{{ url_for('home') }}" class="pub-brand">
+            <span class="pub-brand-icon">E</span>
+            <span>EventLog</span>
+        </a>
+
+        <nav class="pub-nav">
+            <a href="{{ url_for('home') }}" class="pub-nav-link">My Dashboard</a>
+            <a href="{{ url_for('published_posts') }}" class="pub-nav-link">Published Feed</a>
+            <a href="{{ url_for('people') }}" class="pub-nav-link">People</a>
+            <a href="{{ url_for('notifications') }}" class="pub-nav-link">Notifications</a>
+            <a href="{{ url_for('profile', username=current_user.Username) }}" class="pub-nav-link">My Profile</a>
+            <a href="{{ url_for('logout') }}" class="pub-nav-link">Logout</a>
+        </nav>
+    </header>
+
+    <main class="notifications-main">
+
+        <section class="notifications-heading">
+            <h1>Notifications</h1>
+            <p>Stay updated on what's happening with your account.</p>
+        </section>
+
+        <section class="notifications-list">
+
+            {% for notification, actor in notifications %}
+
+                <article class="notification-card">
+
+                    <div class="notification-avatar">
+                        {{ (actor.Username or 'U')[0]|upper }}
+                    </div>
+
+                    <div class="notification-content">
+
+                        {% if notification.notification_type == 'follow' %}
+
+                            <p>
+                                <strong>@{{ actor.Username }}</strong>
+                                started following you.
+                            </p>
+
+                        {% elif notification.notification_type == 'like' %}
+
+                            <p>
+                                <strong>@{{ actor.Username }}</strong>
+                                liked your post.
+                            </p>
+
+                        {% elif notification.notification_type == 'comment' %}
+
+                            <p>
+                                <strong>@{{ actor.Username }}</strong>
+                                commented on your post.
+                            </p>
+
+                        {% else %}
+
+                            <p>
+                                <strong>@{{ actor.Username }}</strong>
+                                interacted with you.
+                            </p>
+
+                        {% endif %}
+
+                        <small>{{ notification.date }}</small>
+
+                    </div>
+
+                    {% if not notification.is_read %}
+                        <span class="notification-dot" title="Unread notification"></span>
+                    {% endif %}
+
+                </article>
+
+            {% else %}
+
+                <div class="notifications-empty">
+                    <div class="empty-icon">E</div>
+                    <h2>No notifications yet</h2>
+                    <p>When someone interacts with you, you'll see it here.</p>
+                </div>
+
+            {% endfor %}
+
+        </section>
+
+    </main>
+
+    <footer class="notifications-footer">
+        <p>EventLog &copy; 2026 · Share your ideas.</p>
+    </footer>
+
+</body>
+</html>
