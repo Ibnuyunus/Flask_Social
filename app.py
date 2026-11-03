@@ -37,7 +37,7 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///event_database2.db"
+    app.config['SQLALCHEMY_DATABASE_URI'] = ("sqlite:///" + os.path.join(app.root_path,"var","app-instance","event_database2.db"))
 
     class Base(DeclarativeBase):
         pass
@@ -69,6 +69,17 @@ def create_app(test_config=None):
         Password = mapped_column(db.String, nullable=False)
         date = mapped_column(db.String)
 
+    class Follow(db.Model):
+        __tablename__ = 'follow'
+        id = mapped_column(db.Integer, primary_key=True)
+        follower_id = mapped_column( db.Integer, db.ForeignKey('user.id'), nullable=False )
+        following_id = mapped_column( db.Integer, db.ForeignKey('user.id'), nullable=False)
+        date = mapped_column(db.String)
+        __table_args__ = (
+            db.UniqueConstraint( 'follower_id', 'following_id', name='unique_user_follow' ),
+            db.CheckConstraint( 'follower_id != following_id', name='prevent_self_follow' )
+        )
+
     class Comment(db.Model):
         id = mapped_column(db.Integer, primary_key=True)
         content = mapped_column(db.String, nullable=False)
@@ -82,11 +93,19 @@ def create_app(test_config=None):
         
         id = mapped_column(db.Integer, primary_key=True)
         post_id = mapped_column( db.Integer, db.ForeignKey('post.id'), nullable=False)
-
         user_id = mapped_column( db.Integer, db.ForeignKey('user.id'), nullable=False)
-
         __table_args__ = ( db.UniqueConstraint( 'post_id', 'user_id', name='unique_user_like_per_post'),)
 
+    class Notification(db.Model):
+        __tablename__ = 'notification'
+
+        id = mapped_column(db.Integer, primary_key=True)
+        recipient_id = mapped_column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+        actor_id = mapped_column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+        notification_type = mapped_column(db.String, nullable=False)
+        post_id = mapped_column(db.Integer, db.ForeignKey('post.id'), nullable=True)
+        is_read = mapped_column(db.Boolean, default=False, nullable=False)
+        date = mapped_column(db.String, nullable=False)
 
     @login_manager.user_loader
     def load_user(user_id):
@@ -102,6 +121,204 @@ def create_app(test_config=None):
     app.cli.add_command(init_db_command)
 
 
+    @app.route('/people')
+    @login_required
+    def people():
+
+        search = request.args.get('search', '').strip()
+
+        users_query = User.query.filter(User.id != current_user.id)
+
+        if search:
+            users_query = users_query.filter(
+                db.or_(
+                    User.Firstname.ilike(f'%{search}%'),
+                    User.Lastname.ilike(f'%{search}%'),
+                    User.Username.ilike(f'%{search}%')
+                )
+            )
+
+        all_users = users_query.order_by(User.Username).all()
+
+        # Get the IDs of users the current user follows.
+        following_ids = {
+            follow.following_id
+            for follow in Follow.query.filter_by(
+                follower_id=current_user.id
+            ).all()
+        }
+
+        return render_template(
+            'people.html',
+            all_users=all_users,
+            search=search,
+            following_ids=following_ids
+        )
+
+
+    
+    @app.route('/profile/<username>')
+    @login_required
+    def profile(username):
+
+        # Find the user whose profile is being viewed.
+        person = User.query.filter_by(Username=username).first_or_404()
+
+        # Count users who follow this person.
+        followers_count = Follow.query.filter_by(
+            following_id=person.id
+        ).count()
+
+        # Count users this person follows.
+        following_count = Follow.query.filter_by(
+            follower_id=person.id
+        ).count()
+
+        # Check whether the logged-in user follows this person.
+        is_following = Follow.query.filter_by(
+            follower_id=current_user.id,
+            following_id=person.id
+        ).first() is not None
+
+        # Retrieve this user's active, published events.
+        user_posts = Post.query.filter_by(
+            user_id=person.id,
+            published=True,
+            status="Active"
+        ).order_by(Post.date.desc()).all()
+
+        # Get the IDs of the events displayed on this profile.
+        post_ids = [post.id for post in user_posts]
+
+        # Retrieve comments belonging to these events.
+        if post_ids:
+            comments = Comment.query.filter(
+                Comment.post_id.in_(post_ids)
+            ).all()
+        else:
+            comments = []
+
+        # Get usernames for displaying comment authors.
+        users = User.query.all()
+        comment_usernames = {
+            user.id: user.Username for user in users
+        }
+
+        # Start every event with a like count of zero.
+        like_counts = {post_id: 0 for post_id in post_ids}
+
+        if post_ids:
+            like_rows = db.session.execute(
+                db.select(
+                    Like.post_id,
+                    db.func.count(Like.id)
+                )
+                .where(Like.post_id.in_(post_ids))
+                .group_by(Like.post_id)
+            ).all()
+
+            for post_id, count in like_rows:
+                like_counts[post_id] = count
+
+            # Find which events the logged-in user has liked.
+            liked_post_ids = set(
+                db.session.execute(
+                    db.select(Like.post_id).where(
+                        Like.user_id == current_user.id,
+                        Like.post_id.in_(post_ids)
+                    )
+                ).scalars().all()
+            )
+        else:
+            liked_post_ids = set()
+
+        # Pair each event with its author.
+        rows = [(post, person) for post in user_posts]
+
+        # Display the profile.
+        return render_template(
+            'profile.html',
+            person=person,
+            rows=rows,
+            comments=comments,
+            comment_usernames=comment_usernames,
+            like_counts=like_counts,
+            liked_post_ids=liked_post_ids,
+            is_following=is_following,
+            followers_count=followers_count,
+            following_count=following_count
+        )
+
+    # Continue with your existing code...
+    @app.route('/follow/<int:user_id>', methods=['POST'])
+    @login_required
+    def toggle_follow(user_id):
+        person = db.session.get(User, user_id)
+
+        if person is None:
+            abort(404)
+
+        if person.id == current_user.id:
+            abort(400)
+
+        return_to = request.form.get('return_to', 'profile')
+
+        if return_to == 'people':
+            destination = url_for('people')
+        else:
+            destination = url_for('profile', username=person.Username)
+
+        existing_follow = Follow.query.filter_by(
+            follower_id=current_user.id,
+            following_id=person.id
+        ).first()
+
+        if existing_follow:
+            db.session.delete(existing_follow)
+            flash('You have unfollowed this user.')
+
+        else:
+            new_follow = Follow(
+                follower_id=current_user.id,
+                following_id=person.id,
+                date=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            )
+
+            new_notification = Notification(
+                recipient_id=person.id,
+                actor_id=current_user.id,
+                notification_type='follow',
+                date=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            )
+
+            db.session.add(new_follow)
+            db.session.add(new_notification)
+
+            flash('You are now following this user.')
+
+        db.session.commit()
+
+        return redirect(destination)
+
+
+
+    @app.route('/notifications')
+    @login_required
+    def notifications():
+        notifications = db.session.query(Notification, User).join(
+            User, Notification.actor_id == User.id
+        ).filter(
+            Notification.recipient_id == current_user.id
+        ).order_by(
+            Notification.id.desc()
+        ).all()
+
+        return render_template(
+            'notification.html',
+            notifications=notifications
+        )
+
+
     @app.route('/post/<int:id>/comment', methods=['POST'])
     @login_required
     def add_comment(id):
@@ -110,15 +327,24 @@ def create_app(test_config=None):
         if post is None or not post.published or post.status != "Active":
             abort(404)
 
+        # Decide where to return after submitting the comment.
+        return_to = request.form.get('return_to', 'published')
+
+        if return_to == 'profile':
+            author = db.session.get(User, post.user_id)
+            destination = url_for('profile', username=author.Username)
+        else:
+            destination = url_for('published_posts')
+
         content = request.form.get('content', '').strip()
 
         if not content:
             flash('Please enter a comment.')
-            return redirect(url_for('published_posts'))
+            return redirect(destination)
 
         if len(content) > 2000:
             flash('Comments cannot exceed 2000 characters.')
-            return redirect(url_for('published_posts'))
+            return redirect(destination)
 
         comment = Comment(
             content=content,
@@ -131,26 +357,26 @@ def create_app(test_config=None):
         db.session.commit()
 
         flash('Comment added successfully.')
-        return redirect(url_for('published_posts'))
+        return redirect(destination)
+
 
 
     @app.route('/post/<int:id>/like', methods=['POST'])
     @login_required
     def toggle_like(id):
-        print("\n========== LIKE DEBUG START ==========")
-        print("Route reached!")
-        print("Post ID:", id)
-        print("Logged-in user ID:", current_user.id)
-
         post = db.session.get(Post, id)
 
-        if post is None:
-            print("ERROR: Post not found.")
+        if post is None or not post.published or post.status != "Active":
             abort(404)
 
-        if not post.published or post.status != "Active":
-            print("ERROR: Post is not published and active.")
-            abort(404)
+        # Decide where to return after liking or unliking.
+        return_to = request.form.get('return_to', 'published')
+
+        if return_to == 'profile':
+            author = db.session.get(User, post.user_id)
+            destination = url_for('profile', username=author.Username)
+        else:
+            destination = url_for('published_posts')
 
         existing_like = Like.query.filter_by(
             post_id=post.id,
@@ -159,10 +385,8 @@ def create_app(test_config=None):
 
         try:
             if existing_like:
-                print("Action: Removing existing like.")
                 db.session.delete(existing_like)
             else:
-                print("Action: Adding new like.")
                 new_like = Like(
                     post_id=post.id,
                     user_id=current_user.id
@@ -170,21 +394,14 @@ def create_app(test_config=None):
                 db.session.add(new_like)
 
             db.session.commit()
-            print("Database commit completed.")
-
-            total_likes = Like.query.filter_by(
-                post_id=post.id
-            ).count()
-
-            print("Total likes after commit:", total_likes)
-            print("========== LIKE DEBUG END ==========\n")
 
         except Exception as error:
             db.session.rollback()
             print("LIKE ERROR:", repr(error))
             raise
 
-        return redirect(url_for('published_posts'))
+        return redirect(destination)
+
 
     @app.route('/post/<int:id>')
     @login_required
@@ -423,6 +640,9 @@ def create_app(test_config=None):
     
     with app.app_context():
         db.create_all()
+
+        # print("ACTIVE DATABASE:", db.engine.url.database)
+        # print("ABSOLUTE PATH:", db.engine.url)
 
     return app
 

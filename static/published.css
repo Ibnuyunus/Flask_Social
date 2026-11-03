@@ -1,7 +1,11 @@
 
 /* =========================================
-   POSTLOG — PUBLISHED FEED
+   EVENTLOG — PUBLISHED FEED & USER PROFILE
    File: static/published.css
+========================================= */
+
+/* =========================================
+   1. GLOBAL PAGE STYLES
 ========================================= */
 
 .published-page {
@@ -21,7 +25,13 @@
     line-height: 1.6;
 }
 
-/* Header */
+.published-page * {
+    box-sizing: border-box;
+}
+
+/* =========================================
+   2. NAVIGATION HEADER
+========================================= */
 
 .published-page .pub-header {
     display: flex;
@@ -83,7 +93,9 @@
     color: var(--pub-primary);
 }
 
-/* Main content */
+/* =========================================
+   3. MAIN CONTENT
+========================================= */
 
 .published-page .pub-main {
     width: min(100% - 32px, 780px);
@@ -117,7 +129,9 @@
     font-size: 15px;
 }
 
-/* Post card */
+/* =========================================
+   4. POST CARD
+========================================= */
 
 .published-page .pub-post-card {
     margin-bottom: 26px;
@@ -182,7 +196,9 @@
     background: #eff6ff;
 }
 
-/* Post content */
+/* =========================================
+   5. POST DESCRIPTION AND ATTACHMENTS
+========================================= */
 
 .published-page .pub-post-content {
     padding: 22px 24px;
@@ -190,11 +206,13 @@
 
 .published-page .pub-description {
     margin: 0;
+    padding: 0;
     color: #334155;
     font-size: 15px;
     line-height: 1.8;
     overflow-wrap: anywhere;
-    white-space: pre-wrap;
+    white-space: pre-line;
+    text-indent: 0;
 }
 
 .published-page .pub-media {
@@ -257,7 +275,9 @@
     font-size: 12px;
 }
 
-/* Post metadata */
+/* =========================================
+   6. POST METADATA
+========================================= */
 
 .published-page .pub-post-meta {
     display: flex;
@@ -291,7 +311,56 @@
     font-size: 12px;
 }
 
-/* Comments section */
+/* =========================================
+   7. LIKE AND UNLIKE
+========================================= */
+
+.published-page .pub-like-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 24px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.published-page .pub-like-section form {
+    margin: 0;
+}
+
+.published-page .pub-like-btn {
+    padding: 8px 15px;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    background: #fff;
+    color: #dc2626;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.published-page .pub-like-btn:hover {
+    background: #fef2f2;
+}
+
+.published-page .pub-like-btn.pub-liked {
+    border-color: #9f06ff;
+    background: #9f06ff;
+    color: #fff;
+}
+
+.published-page .pub-like-btn:active {
+    transform: scale(0.97);
+}
+
+.published-page .pub-like-count {
+    color: var(--pub-muted);
+    font-size: 13px;
+}
+
+/* =========================================
+   8. COMMENTS
+========================================= */
 
 .published-page .pub-comments {
     padding: 22px 24px 24px;
@@ -389,7 +458,9 @@
     text-align: center;
 }
 
-/* Comment form */
+/* =========================================
+   9. COMMENT FORM
+========================================= */
 
 .published-page .pub-comment-form {
     display: flex;
@@ -437,7 +508,9 @@
     transform: scale(0.98);
 }
 
-/* Empty state */
+/* =========================================
+   10. EMPTY STATE
+========================================= */
 
 .published-page .pub-empty-state {
     padding: 55px 24px;
@@ -486,7 +559,155 @@
     background: var(--pub-primary-dark);
 }
 
-/* Footer */
+/* =========================================
+   11. PROFILE HEADER
+========================================= */
+
+.published-page .profile-intro {
+    margin-bottom: 35px;
+    padding: 30px;
+    background: #fff;
+    border: 1px solid var(--pub-border);
+    border-radius: 18px;
+    box-shadow: 0 5px 20px rgb(15 23 42 / 4%);
+}
+
+/* Avatar and profile details stay side by side */
+
+/* =========================================
+   PROFILE HEADER — FINAL LAYOUT
+========================================= */
+
+.published-page .profile-intro {
+    margin-bottom: 35px;
+    padding: 30px;
+    background: #ffffff;
+    border: 1px solid var(--pub-border);
+    border-radius: 18px;
+    box-shadow: 0 5px 20px rgb(15 23 42 / 4%);
+}
+
+/* Avatar and details side by side */
+.published-page .profile-layout {
+    display: grid !important;
+    grid-template-columns: 90px minmax(0, 1fr) !important;
+    align-items: center;
+    column-gap: 22px;
+    width: 100%;
+}
+
+/* Avatar */
+.published-page .profile-layout .profile-avatar {
+    display: grid;
+    width: 90px;
+    height: 90px;
+    min-width: 90px;
+    place-items: center;
+    border: 4px solid #eff6ff;
+    border-radius: 50%;
+    background: #dbeafe;
+    color: var(--pub-primary);
+    font-size: 36px;
+    font-weight: 800;
+}
+
+/* Details */
+.published-page .profile-layout .profile-details {
+    min-width: 0;
+    width: 100%;
+}
+
+/* Name and follow button */
+.published-page .profile-layout .profile-name-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.published-page .profile-identity {
+    min-width: 0;
+}
+
+.published-page .profile-identity h1 {
+    margin: 0;
+    color: var(--pub-text);
+    font-size: 30px;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+}
+
+.published-page .profile-identity .profile-username {
+    margin: 5px 0 0;
+    color: var(--pub-muted);
+    font-size: 14px;
+}
+
+/* Statistics */
+.published-page .profile-layout .profile-stats {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-top: 22px;
+}
+
+.published-page .profile-layout .profile-stat {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+
+.published-page .profile-layout .profile-stat strong {
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.published-page .profile-layout .profile-stat span {
+    color: var(--pub-muted);
+    font-size: 14px;
+}
+
+/* Follow button */
+.published-page .profile-follow-form {
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.published-page .profile-follow-btn {
+    min-width: 110px;
+    padding: 10px 22px;
+    border: 1px solid var(--pub-primary);
+    border-radius: 25px;
+    background: var(--pub-primary);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.published-page .profile-follow-btn:hover {
+    background: var(--pub-primary-dark);
+    border-color: var(--pub-primary-dark);
+}
+
+.published-page .profile-follow-btn.following {
+    border-color: var(--pub-border);
+    background: #fff;
+    color: var(--pub-text);
+}
+
+.published-page .profile-follow-btn.following:hover {
+    border-color: #fecaca;
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+/* =========================================
+   12. FOOTER
+========================================= */
 
 .published-page .pub-footer {
     padding: 22px 16px;
@@ -501,7 +722,9 @@
     font-size: 12px;
 }
 
-/* Accessibility */
+/* =========================================
+   13. ACCESSIBILITY
+========================================= */
 
 .published-page a:focus-visible,
 .published-page button:focus-visible,
@@ -510,9 +733,14 @@
     outline-offset: 3px;
 }
 
-/* Responsive layout */
+/* =========================================
+   14. RESPONSIVE DESIGN
+========================================= */
 
 @media (max-width: 600px) {
+
+    /* Navigation */
+
     .published-page .pub-header {
         align-items: flex-start;
         flex-direction: column;
@@ -530,10 +758,14 @@
         font-size: 12px;
     }
 
+    /* Main content */
+
     .published-page .pub-main {
         width: calc(100% - 24px);
         padding-top: 30px;
     }
+
+    /* Post cards */
 
     .published-page .pub-post-header {
         gap: 10px;
@@ -563,6 +795,14 @@
         padding: 13px 17px;
     }
 
+    /* Likes */
+
+    .published-page .pub-like-section {
+        padding: 13px 17px;
+    }
+
+    /* Comments */
+
     .published-page .pub-comments {
         padding: 18px 17px;
     }
@@ -575,60 +815,100 @@
         width: 100%;
         min-height: 44px;
     }
-}
 
+    /* Profile */
 
-/* Functional Like / Unlike button */
+    .published-page .profile-intro {
+        padding: 20px 16px;
+    }
 
-.published-page .pub-like-section {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 24px;
-    border-bottom: 1px solid #f1f5f9;
-}
+    .published-page .profile-header {
+        flex-direction: row;
+        align-items: center;
+        gap: 15px;
+    }
 
-.published-page .pub-like-section form {
-    margin: 0;
-}
+    .published-page .profile-avatar {
+        flex: 0 0 65px;
+        width: 65px;
+        height: 65px;
+        font-size: 27px;
+        border-width: 3px;
+    }
 
-.published-page .pub-like-btn {
-    padding: 8px 15px;
-    border: 1px solid #fecaca;
-    border-radius: 8px;
-    background: #fff;
-    color: #dc2626;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.2s;
-}
+    .published-page .profile-name-row {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+    }
 
-.published-page .pub-like-btn:hover {
-    background: #fef2f2;
-}
+    .published-page .profile-name-row h1 {
+        font-size: 22px;
+    }
 
-.published-page .pub-like-btn.pub-liked {
-    border-color: #dc2626;
-    background: #9f06ff;
-    color: #fff;
-}
+    .published-page .profile-username {
+        font-size: 13px;
+    }
 
-.published-page .pub-like-btn:active {
-    transform: scale(0.97);
-}
+    .published-page .profile-stats {
+        gap: 15px;
+        margin-top: 18px;
+    }
 
-.published-page .pub-like-count {
-    color: #64748b;
-    font-size: 13px;
-}
+    .published-page .profile-stat {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0;
+    }
 
-@media (max-width: 600px) {
-    .published-page .pub-like-section {
-        padding: 13px 17px;
+    .published-page .profile-stat strong {
+        font-size: 16px;
+    }
+
+    .published-page .profile-stat span {
+        font-size: 12px;
+    }
+
+    .published-page .profile-follow-btn {
+        min-width: 95px;
+        padding: 8px 13px;
+    }
+        .published-page .profile-layout {
+        grid-template-columns: 65px minmax(0, 1fr) !important;
+        align-items: center;
+        column-gap: 15px;
+    }
+
+    .published-page .profile-layout .profile-avatar {
+        width: 65px;
+        height: 65px;
+        min-width: 65px;
+        font-size: 27px;
+    }
+
+    .published-page .profile-identity h1 {
+        font-size: 21px;
+    }
+
+    .published-page .profile-layout .profile-stats {
+        gap: 15px;
+        margin-top: 16px;
+    }
+
+    .published-page .profile-layout .profile-stat {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .published-page .profile-name-row {
+        align-items: flex-start;
     }
 }
 
+/* =========================================
+   15. REDUCED MOTION
+========================================= */
 
 @media (prefers-reduced-motion: reduce) {
     .published-page *,

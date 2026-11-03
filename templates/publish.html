@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Published Posts | PostLog</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+    <title>Published Posts | EventLog</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='published.css') }}">
 </head>
 
@@ -13,22 +13,26 @@
 
     <header class="pub-header">
         <a href="{{ url_for('home') }}" class="pub-brand">
-            <span class="pub-brand-icon">P</span>
-            <span>PostLog</span>
+            <span class="pub-brand-icon">E</span>
+            <span>EventLog</span>
         </a>
 
         <nav class="pub-nav">
-            <a href="{{ url_for('home') }}" class="pub-nav-link">My Posts</a>
-            <span class="pub-current-page">Published Feed</span>
+            <a href="{{ url_for('home') }}" class="pub-nav-link">My Dashboard</a>
+            <a href="{{ url_for('published_posts') }}" class="pub-nav-link">Published Feed</a>
+            <a href="{{ url_for('people') }}" class="pub-nav-link">People</a>
+            <a href="{{ url_for('notifications') }}" class="pub-nav-link">Notifications</a>
+            <a href="{{ url_for('profile', username=current_user.Username) }}"
+               class="pub-nav-link">My Profile</a>
+            <a href="{{ url_for('logout') }}" class="pub-nav-link">Logout</a>
         </nav>
     </header>
 
     <main class="pub-main">
 
         <section class="pub-intro">
-            <span class="pub-eyebrow">THE COMMUNITY FEED</span>
-            <h1>Published Posts</h1>
-            <p>Discover posts, explore ideas, and join the conversation.</p>
+            <h1>Published Events</h1>
+            <p>Explore events and ideas shared by the EventLog community.</p>
         </section>
 
         <section class="pub-feed">
@@ -37,14 +41,16 @@
 
                 <article class="pub-post-card">
 
-                    <!-- Post header -->
+                    <!-- Post Header -->
                     <div class="pub-post-header">
+
                         <div class="pub-avatar">
                             {{ (author.Username or 'U')[0]|upper }}
                         </div>
 
                         <div class="pub-author-info">
                             <h2>{{ post.title }}</h2>
+
                             <p class="pub-author-name">
                                 @{{ author.Username }}
                             </p>
@@ -56,73 +62,104 @@
                                 Edit post
                             </a>
                         {% endif %}
+
                     </div>
 
-                    <!-- Post content -->
+                    <!-- Post Content -->
                     <div class="pub-post-content">
-                        <p class="pub-description">{{ post.description }}</p>
+
+                        <p class="pub-description">
+                            {{ post.description }}
+                        </p>
 
                         {% if post.upload %}
+
                             <div class="pub-media">
+
                                 {% set extension = post.upload.rsplit('.', 1)[-1].lower() %}
 
                                 {% if extension in ['png', 'jpg', 'jpeg', 'gif'] %}
+
                                     <img
                                         src="{{ url_for('uploaded_file', filename=post.upload) }}"
                                         alt="Image attached to {{ post.title }}"
                                         loading="lazy">
+
                                 {% else %}
+
                                     <a class="pub-attachment"
                                        href="{{ url_for('uploaded_file', filename=post.upload) }}"
                                        target="_blank"
                                        rel="noopener noreferrer">
+
                                         <span class="pub-file-icon">FILE</span>
+
                                         <span>
                                             <strong>View attachment</strong>
                                             <small>{{ post.upload }}</small>
                                         </span>
+
                                     </a>
+
                                 {% endif %}
+
                             </div>
+
                         {% endif %}
+
                     </div>
 
-                    <!-- Post date -->
+                    <!-- Post Date -->
                     <div class="pub-post-meta">
+
                         <span class="pub-published-label">
                             <span class="pub-status-dot"></span>
                             Published
                         </span>
 
-                        <span class="pub-post-date">{{ post.date }}</span>
+                        <span class="pub-post-date">
+                            {{ post.date }}
+                        </span>
+
                     </div>
 
-
+                    <!-- Likes -->
                     <div class="pub-like-section">
 
-                    <form method="POST"
-                        action="{{ url_for('toggle_like', id=post.id) }}">
+                        <form method="POST"
+                              action="{{ url_for('toggle_like', id=post.id) }}">
 
-                        {% if post.id in liked_post_ids %}
-                            <button type="submit" class="pub-like-btn pub-liked">
-                                ♥ Unlike
-                            </button>
-                        {% else %}
-                            <button type="submit" class="pub-like-btn">
-                                ♡ Like
-                            </button>
-                        {% endif %}
+                            <input type="hidden"
+                                   name="return_to"
+                                   value="published">
 
-                    </form>
+                            {% if post.id in liked_post_ids %}
 
-                    <span class="pub-like-count">
-                        {{ like_counts.get(post.id, 0) }}
-                        {% if like_counts.get(post.id, 0) == 1 %}
-                            like
-                        {% else %}
-                            likes
-                        {% endif %}
-                    </span>
+                                <button type="submit"
+                                        class="pub-like-btn pub-liked">
+                                    ♥ Unlike
+                                </button>
+
+                            {% else %}
+
+                                <button type="submit"
+                                        class="pub-like-btn">
+                                    ♡ Like
+                                </button>
+
+                            {% endif %}
+
+                        </form>
+
+                        <span class="pub-like-count">
+                            {{ like_counts.get(post.id, 0) }}
+
+                            {% if like_counts.get(post.id, 0) == 1 %}
+                                like
+                            {% else %}
+                                likes
+                            {% endif %}
+                        </span>
 
                     </div>
 
@@ -134,10 +171,13 @@
                             | list %}
 
                         <div class="pub-comments-heading">
+
                             <h3>Comments</h3>
+
                             <span class="pub-comment-count">
                                 {{ post_comments|length }}
                             </span>
+
                         </div>
 
                         <div class="pub-comment-list">
@@ -145,11 +185,13 @@
                             {% for comment in post_comments %}
 
                                 <div class="pub-comment">
+
                                     <div class="pub-comment-avatar">
                                         {{ (comment_usernames.get(comment.user_id, 'Unknown user'))[0]|upper }}
                                     </div>
 
                                     <div class="pub-comment-body">
+
                                         <strong class="pub-comment-author">
                                             {{ comment_usernames.get(comment.user_id, 'Unknown user') }}
                                         </strong>
@@ -157,7 +199,9 @@
                                         <p>{{ comment.content }}</p>
 
                                         <small>{{ comment.date }}</small>
+
                                     </div>
+
                                 </div>
 
                             {% else %}
@@ -170,12 +214,14 @@
 
                         </div>
 
-                        <!-- Comment form -->
+                        <!-- Comment Form -->
                         <form class="pub-comment-form"
                               method="POST"
                               action="{{ url_for('add_comment', id=post.id) }}">
 
-                            <input type="hidden" name="return_to" value="published">
+                            <input type="hidden"
+                                   name="return_to"
+                                   value="published">
 
                             <input
                                 type="text"
@@ -186,6 +232,7 @@
                                 required>
 
                             <button type="submit">Comment</button>
+
                         </form>
 
                     </section>
@@ -195,10 +242,19 @@
             {% else %}
 
                 <div class="pub-empty-state">
-                    <div class="pub-empty-icon">P</div>
-                    <h2>No published posts yet</h2>
-                    <p>When posts are published, they will appear here.</p>
-                    <a href="{{ url_for('home') }}">Go to My Posts</a>
+
+                    <div class="pub-empty-icon">E</div>
+
+                    <h2>No published events yet</h2>
+
+                    <p>
+                        No events have been published yet. Be the first to share!
+                    </p>
+
+                    <a href="{{ url_for('home') }}">
+                        Back to Dashboard
+                    </a>
+
                 </div>
 
             {% endfor %}
@@ -208,7 +264,7 @@
     </main>
 
     <footer class="pub-footer">
-        <p>PostLog &copy; 2026 · Share your ideas.</p>
+        <p>EventLog &copy; 2026 · Share your ideas.</p>
     </footer>
 
 </body>
