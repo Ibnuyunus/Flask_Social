@@ -24,8 +24,15 @@
 
             <a href="{{ url_for('people') }}" class="pub-nav-link"> People </a>
 
-            <a href="{{ url_for('notifications') }}" class="pub-nav-link"> Notifications </a>
+            <a href="{{ url_for('notifications') }}" class="pub-nav-link">
+                Notifications
 
+                {% if unread_notification_count > 0 %}
+                    <span class="notification-badge">
+                        {{ unread_notification_count }}
+                    </span>
+                {% endif %}
+            </a>
             <a href="{{ url_for('profile', username=current_user.Username) }}" class="pub-user-profile">
 
                 <span class="pub-user-avatar"> {{ (current_user.Username or 'U')[0]|upper }} </span>

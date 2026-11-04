@@ -107,6 +107,18 @@ def create_app(test_config=None):
         is_read = mapped_column(db.Boolean, default=False, nullable=False)
         date = mapped_column(db.String, nullable=False)
 
+    @app.context_processor
+    def inject_unread_notification_count():
+        unread_notification_count = 0
+
+        if current_user.is_authenticated:
+            unread_notification_count = Notification.query.filter_by(
+                recipient_id=current_user.id,
+                is_read=False).count()
+
+        return { 'unread_notification_count': unread_notification_count 
+        }
+
     @login_manager.user_loader
     def load_user(user_id):
         return db.session.get(User, int(user_id))
@@ -119,6 +131,9 @@ def create_app(test_config=None):
             click.echo('Database created successfully')
 
     app.cli.add_command(init_db_command)
+
+
+
 
 
     @app.route('/people')
