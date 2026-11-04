@@ -19,11 +19,9 @@
         </a>
 
         <nav class="pub-nav">
-            <a href="{{ url_for('home') }}" class="pub-nav-link">My Dashboard</a>
+            <a href="{{ url_for('home') }}" class="pub-nav-link">Dashboard</a>
             <a href="{{ url_for('published_posts') }}" class="pub-nav-link">Published Feed</a>
             <a href="{{ url_for('people') }}" class="pub-nav-link">People</a>
-            <a href="{{ url_for('profile', username=current_user.Username) }}"
-               class="pub-nav-link">My Profile</a>
             <a href="{{ url_for('logout') }}" class="pub-nav-link">Logout</a>
         </nav>
     </header>

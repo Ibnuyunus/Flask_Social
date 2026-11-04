@@ -924,3 +924,75 @@
         animation-iteration-count: 1 !important;
     }
 }
+
+
+
+
+/* =================================
+   Updated Dashboard Navigation
+================================= */
+
+.dash-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 20px;
+}
+
+.dash-nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 16px;
+    flex-wrap: nowrap;
+}
+
+.dash-nav > a {
+    white-space: nowrap;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.dash-user-profile {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.dash-user-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.dash-user-name {
+    white-space: nowrap;
+}
+
+.dash-logout {
+    flex-shrink: 0;
+}
+
+@media (max-width: 850px) {
+    .dash-header {
+        flex-wrap: wrap;
+    }
+
+    .dash-nav {
+        width: 100%;
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: 8px;
+        gap: 18px;
+    }
+}

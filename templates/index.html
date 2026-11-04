@@ -17,21 +17,53 @@
         {% endif %}
     {% endfor %}
 
+
     <header class="dash-header">
+
         <a href="{{ url_for('home') }}" class="dash-brand">
             <span class="brand-icon">E</span>
             <span>EventLog</span>
         </a>
 
         <nav class="dash-nav">
-            <a href="{{ url_for('home') }}" class="active">My Dashboard</a>
-            <a href="{{ url_for('profile', username=current_user.Username) }}">My Profile</a>
-            <a href="{{ url_for('published_posts') }}">Published Feed</a>
-            <a href="{{ url_for('notifications') }}" class="pub-nav-link">Notifications</a>
-            <a href="{{ url_for('people') }}">Discover People</a>
-            <a href="{{ url_for('logout') }}" class="dash-logout">Logout</a>
+
+            <a href="{{ url_for('home') }}" class="active">
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('published_posts') }}">
+                Published Feed
+            </a>
+
+            <a href="{{ url_for('people') }}">
+                People
+            </a>
+
+            <a href="{{ url_for('notifications') }}">
+                Notifications
+            </a>
+
+            <a href="{{ url_for('profile', username=current_user.Username) }}"
+            class="dash-user-profile">
+
+                <span class="dash-user-avatar">
+                    {{ (current_user.Username or 'U')[0]|upper }}
+                </span>
+
+                <span class="dash-user-name">
+                    {{ current_user.Username }}
+                </span>
+
+            </a>
+
+            <a href="{{ url_for('logout') }}" class="dash-logout">
+                Logout
+            </a>
+
         </nav>
+
     </header>
+
 
     <main class="dash-container">
 

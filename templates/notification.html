@@ -12,19 +12,35 @@
 <body class="notifications-page">
 
     <header class="pub-header">
+
         <a href="{{ url_for('home') }}" class="pub-brand">
             <span class="pub-brand-icon">E</span>
             <span>EventLog</span>
         </a>
 
         <nav class="pub-nav">
-            <a href="{{ url_for('home') }}" class="pub-nav-link">My Dashboard</a>
-            <a href="{{ url_for('published_posts') }}" class="pub-nav-link">Published Feed</a>
-            <a href="{{ url_for('people') }}" class="pub-nav-link">People</a>
-            <a href="{{ url_for('notifications') }}" class="pub-nav-link">Notifications</a>
-            <a href="{{ url_for('profile', username=current_user.Username) }}" class="pub-nav-link">My Profile</a>
-            <a href="{{ url_for('logout') }}" class="pub-nav-link">Logout</a>
+
+            <a href="{{ url_for('home') }}" class="pub-nav-link"> Dashboard </a>
+
+            <a href="{{ url_for('published_posts') }}" class="pub-nav-link"> Published Feed </a>
+
+            <a href="{{ url_for('people') }}" class="pub-nav-link"> People </a>
+
+            <a href="{{ url_for('notifications') }}" class="pub-current-page"> Notifications </a>
+
+            <a href="{{ url_for('profile', username=current_user.Username) }}"
+            class="pub-user-profile">
+
+                <span class="pub-user-avatar"> {{ (current_user.Username or 'U')[0]|upper }} </span>
+
+                <span class="pub-user-name"> {{ current_user.Username }} </span>
+
+            </a>
+
+            <a href="{{ url_for('logout') }}" class="pub-nav-link pub-logout"> Logout </a>
+
         </nav>
+
     </header>
 
     <main class="notifications-main">
@@ -49,28 +65,28 @@
                         {% if notification.notification_type == 'follow' %}
 
                             <p>
-                                <strong>@{{ actor.Username }}</strong>
+                                <strong>{{ actor.Username }}</strong>
                                 started following you.
                             </p>
 
                         {% elif notification.notification_type == 'like' %}
 
                             <p>
-                                <strong>@{{ actor.Username }}</strong>
+                                <strong>{{ actor.Username }}</strong>
                                 liked your post.
                             </p>
 
                         {% elif notification.notification_type == 'comment' %}
 
                             <p>
-                                <strong>@{{ actor.Username }}</strong>
+                                <strong>{{ actor.Username }}</strong>
                                 commented on your post.
                             </p>
 
                         {% else %}
 
                             <p>
-                                <strong>@{{ actor.Username }}</strong>
+                                <strong>{{ actor.Username }}</strong>
                                 interacted with you.
                             </p>
 
