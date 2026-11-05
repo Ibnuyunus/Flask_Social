@@ -4,93 +4,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Published Posts | EventLog</title>
+    <title>Published Events | EventLog</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='published.css') }}">
 </head>
 
 <body class="published-page">
 
+    <!-- Navigation -->
     <header class="pub-header">
 
-        <a href="{{ url_for('home') }}" class="pub-brand">
+        <a href="{{ url_for('landing') }}" class="pub-brand">
             <span class="pub-brand-icon">E</span>
             <span>EventLog</span>
         </a>
 
         <nav class="pub-nav">
 
-            <a href="{{ url_for('home') }}" class="pub-nav-link"> Dashboard</a>
+            <a href="{{ url_for('landing') }}" class="pub-nav-link">
+                Home
+            </a>
 
-            <a href="{{ url_for('people') }}" class="pub-nav-link"> People </a>
+            <a href="{{ url_for('published_posts') }}" class="pub-nav-link">
+                Published Feed
+            </a>
 
-            <a href="{{ url_for('notifications') }}" class="pub-nav-link">
-                Notifications
+            {% if current_user.is_authenticated %}
 
-                {% if unread_notification_count > 0 %}
-                    <span class="notification-badge">
-                        {{ unread_notification_count }}
+                <a href="{{ url_for('home') }}" class="pub-nav-link">
+                    Dashboard
+                </a>
+
+                <a href="{{ url_for('people') }}" class="pub-nav-link">
+                    People
+                </a>
+
+                <a href="{{ url_for('notifications') }}" class="pub-nav-link">
+                    Notifications
+
+                    {% if unread_notification_count > 0 %}
+                        <span class="notification-badge">
+                            {{ unread_notification_count }}
+                        </span>
+                    {% endif %}
+                </a>
+
+                <a href="{{ url_for('profile', username=current_user.Username) }}"
+                   class="pub-user-profile">
+
+                    <span class="pub-user-avatar">
+                        {{ (current_user.Username or 'U')[0]|upper }}
                     </span>
-                {% endif %}
-            </a>
-            <a href="{{ url_for('profile', username=current_user.Username) }}" class="pub-user-profile">
 
-                <span class="pub-user-avatar"> {{ (current_user.Username or 'U')[0]|upper }} </span>
+                    <span class="pub-user-name">
+                        {{ current_user.Username }}
+                    </span>
 
-                <span class="pub-user-name"> {{ current_user.Username }} </span>
-            </a>
+                </a>
 
-            <a href="{{ url_for('logout') }}" class="pub-nav-link pub-logout"> Logout </a>
+                <a href="{{ url_for('logout') }}"
+                   class="pub-nav-link pub-logout">
+                    Logout
+                </a>
+
+            {% else %}
+
+                <a href="{{ url_for('login') }}" class="pub-nav-link">
+                    Login
+                </a>
+
+                <a href="{{ url_for('signup') }}" class="pub-nav-link">
+                    Sign Up
+                </a>
+
+            {% endif %}
 
         </nav>
 
     </header>
 
 
+    <!-- Main Content -->
     <main class="pub-main">
 
+        <!-- Page Introduction -->
         <section class="pub-intro">
+
             <h1>Published Events</h1>
-            <p>Explore events and ideas shared by the EventLog community.</p>
+
+            <p>
+                Explore events and ideas shared by the EventLog community.
+            </p>
+
         </section>
 
+
+        <!-- Published Feed -->
         <section class="pub-feed">
 
             {% for post, author in rows %}
 
                 <article class="pub-post-card">
 
-                    <!-- Post Header -->
+                    <!-- Author Header -->
                     <div class="pub-post-header">
 
                         <div class="pub-avatar">
-                            {{ (author.Username or 'U')[0]|upper }}
+                            {{ (author.Firstname or author.Username or 'U')[0]|upper }}
                         </div>
 
                         <div class="pub-author-info">
-                            <h2>{{ post.title }}</h2>
+
+                            <h2>
+                                {% if author.Firstname or author.Lastname %}
+                                    {{ author.Firstname or '' }} {{ author.Lastname or '' }}
+                                {% else %}
+                                    {{ author.Username }}
+                                {% endif %}
+                            </h2>
 
                             <p class="pub-author-name">
                                 @{{ author.Username }}
                             </p>
+
                         </div>
 
-                        {% if post.user_id == current_user.id %}
+                        {% if current_user.is_authenticated and post.user_id == current_user.id %}
+
                             <a href="{{ url_for('edit', id=post.id) }}"
                                class="pub-edit-link">
                                 Edit post
                             </a>
+
                         {% endif %}
 
                     </div>
 
+
                     <!-- Post Content -->
                     <div class="pub-post-content">
+
+                        <h3 class="pub-post-title">
+                            {{ post.title }}
+                        </h3>
 
                         <p class="pub-description">
                             {{ post.description }}
                         </p>
 
+
+                        <!-- Attachments -->
                         {% if post.upload %}
 
                             <div class="pub-media">
@@ -128,7 +191,8 @@
 
                     </div>
 
-                    <!-- Post Date -->
+
+                    <!-- Publication Details -->
                     <div class="pub-post-meta">
 
                         <span class="pub-published-label">
@@ -142,35 +206,48 @@
 
                     </div>
 
+
                     <!-- Likes -->
                     <div class="pub-like-section">
 
-                        <form method="POST"
-                              action="{{ url_for('toggle_like', id=post.id) }}">
+                        {% if current_user.is_authenticated %}
 
-                            <input type="hidden"
-                                   name="return_to"
-                                   value="published">
+                            <form method="POST"
+                                  action="{{ url_for('toggle_like', id=post.id) }}">
 
-                            {% if post.id in liked_post_ids %}
+                                <input type="hidden"
+                                       name="return_to"
+                                       value="published">
 
-                                <button type="submit"
-                                        class="pub-like-btn pub-liked">
-                                    ♥ Unlike
-                                </button>
+                                {% if post.id in liked_post_ids %}
 
-                            {% else %}
+                                    <button type="submit"
+                                            class="pub-like-btn pub-liked">
+                                        ♥ Unlike
+                                    </button>
 
-                                <button type="submit"
-                                        class="pub-like-btn">
-                                    ♡ Like
-                                </button>
+                                {% else %}
 
-                            {% endif %}
+                                    <button type="submit"
+                                            class="pub-like-btn">
+                                        ♡ Like
+                                    </button>
 
-                        </form>
+                                {% endif %}
+
+                            </form>
+
+                        {% else %}
+
+                            <a href="{{ url_for('login') }}"
+                               class="pub-like-btn">
+                                ♡ Login to Like
+                            </a>
+
+                        {% endif %}
 
                         <span class="pub-like-count">
+
                             {{ like_counts.get(post.id, 0) }}
 
                             {% if like_counts.get(post.id, 0) == 1 %}
@@ -178,9 +255,11 @@
                             {% else %}
                                 likes
                             {% endif %}
+
                         </span>
 
                     </div>
+
 
                     <!-- Comments -->
                     <section class="pub-comments">
@@ -198,6 +277,7 @@
                             </span>
 
                         </div>
+
 
                         <div class="pub-comment-list">
 
@@ -233,26 +313,40 @@
 
                         </div>
 
+
                         <!-- Comment Form -->
-                        <form class="pub-comment-form"
-                              method="POST"
-                              action="{{ url_for('add_comment', id=post.id) }}">
+                        {% if current_user.is_authenticated %}
 
-                            <input type="hidden"
-                                   name="return_to"
-                                   value="published">
+                            <form class="pub-comment-form"
+                                  method="POST"
+                                  action="{{ url_for('add_comment', id=post.id) }}">
 
-                            <input
-                                type="text"
-                                name="content"
-                                maxlength="2000"
-                                placeholder="Write a comment..."
-                                aria-label="Write a comment"
-                                required>
+                                <input type="hidden"
+                                       name="return_to"
+                                       value="published">
 
-                            <button type="submit">Comment</button>
+                                <input
+                                    type="text"
+                                    name="content"
+                                    maxlength="2000"
+                                    placeholder="Write a comment..."
+                                    aria-label="Write a comment"
+                                    required>
 
-                        </form>
+                                <button type="submit">
+                                    Comment
+                                </button>
+
+                            </form>
+
+                        {% else %}
+
+                            <p class="pub-login-prompt">
+                                <a href="{{ url_for('login') }}">Login</a>
+                                to join the conversation.
+                            </p>
+
+                        {% endif %}
 
                     </section>
 
@@ -260,6 +354,7 @@
 
             {% else %}
 
+                <!-- Empty Feed -->
                 <div class="pub-empty-state">
 
                     <div class="pub-empty-icon">E</div>
@@ -267,12 +362,23 @@
                     <h2>No published events yet</h2>
 
                     <p>
-                        No events have been published yet. Be the first to share!
+                        No events have been published yet.
+                        Be the first to share!
                     </p>
 
-                    <a href="{{ url_for('home') }}">
-                        Back to Dashboard
-                    </a>
+                    {% if current_user.is_authenticated %}
+
+                        <a href="{{ url_for('home') }}">
+                            Back to Dashboard
+                        </a>
+
+                    {% else %}
+
+                        <a href="{{ url_for('signup') }}">
+                            Join EventLog
+                        </a>
+
+                    {% endif %}
 
                 </div>
 
@@ -282,6 +388,8 @@
 
     </main>
 
+
+    <!-- Footer -->
     <footer class="pub-footer">
         <p>EventLog &copy; 2026 · Share your ideas.</p>
     </footer>

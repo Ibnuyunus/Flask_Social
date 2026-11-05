@@ -1,0 +1,259 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventLog | Share Your Events</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='landing.css') }}">
+</head>
+
+<body class="landing-page">
+
+    <!-- Navigation -->
+    <header class="landing-header">
+        <nav class="landing-nav">
+
+            <a href="{{ url_for('landing') }}" class="landing-brand">
+                <span class="brand-icon">E</span>
+                EventLog
+            </a>
+
+            <div class="landing-nav-links">
+                <a href="{{ url_for('landing') }}" class="active">Home</a>
+                <a href="{{ url_for('published_posts') }}">Explore Events</a>
+
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('home') }}">Dashboard</a>
+                    <a href="{{ url_for('profile', username=current_user.Username) }}">
+                        Profile
+                    </a>
+                    <a href="{{ url_for('logout') }}" class="nav-signup">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}">Login</a>
+                    <a href="{{ url_for('signup') }}" class="nav-signup">Sign Up</a>
+                {% endif %}
+            </div>
+
+        </nav>
+    </header>
+
+
+    <main>
+
+        <!-- Hero Section -->
+        <section class="hero-section">
+
+            <div class="hero-content">
+                <span class="hero-label">WELCOME TO EVENTLOG</span>
+
+                <h1>
+                    Share Your Events.
+                    <span>Connect With People.</span>
+                </h1>
+
+                <p>
+                    EventLog is a platform where you can share your events,
+                    discover what others are doing, and connect with a community
+                    through shared experiences.
+                </p>
+
+                <div class="hero-buttons">
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('home') }}" class="btn btn-primary">
+                            Go to Dashboard
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('signup') }}" class="btn btn-primary">
+                            Get Started
+                        </a>
+                    {% endif %}
+
+                    <a href="{{ url_for('published_posts') }}" class="btn btn-secondary">
+                        Explore Events
+                    </a>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="hero-card">
+                    <div class="hero-card-icon">✦</div>
+                    <h3>Your moments matter.</h3>
+                    <p>Share your experiences with the EventLog community.</p>
+                    <div class="hero-card-line"></div>
+                    <div class="hero-card-line short"></div>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- About Section -->
+        <section class="about-section">
+
+            <div class="section-heading">
+                <span class="section-label">ABOUT EVENTLOG</span>
+                <h2>A place to share and discover</h2>
+                <p>
+                    EventLog gives users a simple way to create posts,
+                    share information, and discover events published by others.
+                </p>
+            </div>
+
+            <div class="about-grid">
+
+                <div class="about-card">
+                    <div class="about-icon">✍</div>
+                    <h3>Create Posts</h3>
+                    <p>
+                        Write about your events and experiences and share
+                        them with the community.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <div class="about-icon">🌍</div>
+                    <h3>Explore Events</h3>
+                    <p>
+                        Discover published posts and see what other users
+                        are sharing.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <div class="about-icon">💬</div>
+                    <h3>Connect</h3>
+                    <p>
+                        Interact with other users through likes, comments,
+                        and follows.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Latest Events Section -->
+        <section class="latest-section">
+
+            <div class="latest-heading">
+                <div>
+                    <span class="section-label">FROM THE COMMUNITY</span>
+                    <h2>Latest Events</h2>
+                    <p>Take a look at some of the latest published posts.</p>
+                </div>
+
+                <a href="{{ url_for('published_posts') }}" class="view-all">
+                    View All Events →
+                </a>
+            </div>
+
+
+            {% if latest_events %}
+
+                <div class="events-grid">
+
+                    {% for post, author in latest_events %}
+
+                        <article class="event-card">
+
+                            {% if post.upload %}
+                                {% set extension = post.upload.rsplit('.', 1)[-1].lower() %}
+
+                                {% if extension in ['png', 'jpg', 'jpeg', 'gif'] %}
+                                    <img
+                                        src="{{ url_for('uploaded_file', filename=post.upload) }}"
+                                        alt="Attachment for {{ post.title }}"
+                                        class="event-image"
+                                    >
+                                {% else %}
+                                    <div class="event-file">
+                                        <span>📎</span>
+                                        <span>Attachment available</span>
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                <div class="event-placeholder">
+                                    <span>✦</span>
+                                </div>
+                            {% endif %}
+
+                            <div class="event-content">
+
+                                <span class="event-author">
+                                    Posted by @{{ author.Username }}
+                                </span>
+
+                                <h3>{{ post.title }}</h3>
+
+                                <p class="event-description">
+                                    {{ post.description }}
+                                </p>
+
+                                <div class="event-footer">
+                                    <span>{{ post.date }}</span>
+                                    <a href="{{ url_for('published_posts') }}">
+                                        Explore feed →
+                                    </a>
+                                </div>
+
+                            </div>
+
+                        </article>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-events">
+                    <h3>No published events yet</h3>
+                    <p>Be among the first to share something with the community.</p>
+
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('home') }}" class="btn btn-primary">
+                            Create a Post
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('signup') }}" class="btn btn-primary">
+                            Join EventLog
+                        </a>
+                    {% endif %}
+                </div>
+
+            {% endif %}
+
+        </section>
+
+
+        <!-- Call to Action -->
+        <section class="cta-section">
+            <h2>Ready to share your story?</h2>
+            <p>Join EventLog and start sharing your events with others.</p>
+
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('home') }}" class="btn btn-light">
+                    Go to Dashboard
+                </a>
+            {% else %}
+                <a href="{{ url_for('signup') }}" class="btn btn-light">
+                    Create Your Account
+                </a>
+            {% endif %}
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="landing-footer">
+        <a href="{{ url_for('landing') }}" class="footer-brand">EventLog</a>
+        <p>Share your events. Connect with people.</p>
+        <span>&copy; {{ 2026 }} EventLog. All rights reserved.</span>
+    </footer>
+
+</body>
+</html>
