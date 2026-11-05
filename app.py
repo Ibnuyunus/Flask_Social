@@ -133,9 +133,6 @@ def create_app(test_config=None):
     app.cli.add_command(init_db_command)
 
 
-
-
-
     @app.route('/people')
     @login_required
     def people():
@@ -332,6 +329,32 @@ def create_app(test_config=None):
             'notification.html',
             notifications=notifications
         )
+
+
+    @app.route('/notifications/mark-all-read', methods=['POST'])
+    @login_required
+    def mark_all_notifications_read():
+
+        # Get only unread notifications belonging to the logged-in user
+        unread_notifications = Notification.query.filter_by(
+            recipient_id=current_user.id,
+            is_read=False
+        ).all()
+
+        if unread_notifications:
+
+            # Mark each unread notification as read
+            for notification in unread_notifications:
+                notification.is_read = True
+
+            db.session.commit()
+
+            flash('All notifications have been marked as read.')
+
+        else:
+            flash('You have no unread notifications.')
+
+        return redirect(url_for('notifications'))
 
 
     @app.route('/post/<int:id>/comment', methods=['POST'])

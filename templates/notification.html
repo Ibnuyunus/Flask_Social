@@ -55,7 +55,20 @@
 
         <section class="notifications-heading">
             <h1>Notifications</h1>
+
             <p>Stay updated on what's happening with your account.</p>
+
+            {% if unread_notification_count > 0 %}
+                <form method="POST"
+                    action="{{ url_for('mark_all_notifications_read') }}"
+                    class="mark-all-read-form">
+
+                    <button type="submit" class="mark-all-read-btn">
+                        Mark all as read
+                    </button>
+
+                </form>
+            {% endif %}
         </section>
 
         <section class="notifications-list">
