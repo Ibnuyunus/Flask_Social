@@ -1022,3 +1022,47 @@
     font-weight: 700;
     line-height: 1;
 }
+
+
+.pub-login-prompt {
+    margin-top: 15px;
+    font-size: 13px;
+    color: #687386;
+}
+
+.pub-login-prompt a {
+    color: #4f46e5;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.pub-login-prompt a:hover {
+    text-decoration: underline;
+}
+
+
+/* Post title */
+.pub-post-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #172033;
+    margin: 0 0 12px;
+    line-height: 1.4;
+}
+
+/* Login prompt */
+.pub-login-prompt {
+    margin-top: 15px;
+    font-size: 13px;
+    color: #687386;
+}
+
+.pub-login-prompt a {
+    color: #4f46e5;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.pub-login-prompt a:hover {
+    text-decoration: underline;
+}

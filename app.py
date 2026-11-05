@@ -465,16 +465,19 @@ def create_app(test_config=None):
     @app.route('/edit/<int:id>', methods=['GET', 'POST'])
     @login_required
     def edit(id):
-        
-        # return f"<h1>Post {id}</h1>" 
+
+        # Find the post using its ID.
+        post = db.session.get(Post, id)
+
+        # Stop access if the post does not exist
+        # or does not belong to the logged-in user.
+        if post is None or post.user_id != current_user.id:
+            abort(404)
+
+        # Update the post when the form is submitted.
         if request.method == 'POST':
-            print('here')
-            post = Post.query.filter_by(id=id)
-            post = db.session.execute(post).scalar_one_or_none()
-            print(post)
 
             post.title = request.form['title']
-            
             post.description = request.form['description']
 
             file = request.files.get('post_image')
@@ -483,17 +486,20 @@ def create_app(test_config=None):
 
                 filename = secure_filename(file.filename)
 
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+                file.save(
+                    os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                )
 
                 post.upload = filename
 
-
             db.session.commit()
 
-        edit = Post.query.get(id)
+            flash('Post updated successfully.')
 
-        return render_template('edit.html', edit=edit)
+            return redirect(url_for('home'))
 
+        # Display the edit page.
+        return render_template('edit.html', edit=post)
 
     @app.route('/upload', methods=['GET', 'POST'])
     def upload():
@@ -532,9 +538,11 @@ def create_app(test_config=None):
         return redirect(url_for('home'))
 
 
+
     @app.route('/published')
-    @login_required
     def published_posts():
+
+        # Get all active, published posts and their authors.
         rows = db.session.execute(
             db.select(Post, User)
             .join(User, Post.user_id == User.id)
@@ -545,19 +553,33 @@ def create_app(test_config=None):
             .order_by(Post.date.desc())
         ).all()
 
-        comments = Comment.query.all()
+        # Get the IDs of posts displayed in the feed.
+        post_ids = [post.id for post, author in rows]
 
-        users = User.query.all()
+        # Retrieve comments belonging to these posts.
+        if post_ids:
+            comments = Comment.query.filter(
+                Comment.post_id.in_(post_ids)
+            ).all()
+        else:
+            comments = []
+
+        # Get usernames for displaying comment authors.
+        comment_user_ids = {comment.user_id for comment in comments}
+
+        users = User.query.filter(
+            User.id.in_(comment_user_ids)
+        ).all() if comment_user_ids else []
+
         comment_usernames = {
             user.id: user.Username for user in users
         }
-
-        post_ids = [post.id for post, author in rows]
 
         # Initialize every displayed post with zero likes.
         like_counts = {post_id: 0 for post_id in post_ids}
 
         if post_ids:
+
             like_rows = db.session.execute(
                 db.select(
                     Like.post_id,
@@ -570,6 +592,11 @@ def create_app(test_config=None):
             for post_id, count in like_rows:
                 like_counts[post_id] = count
 
+        # Only check liked posts when a user is logged in.
+        liked_post_ids = set()
+
+        if current_user.is_authenticated and post_ids:
+
             liked_post_ids = set(
                 db.session.execute(
                     db.select(Like.post_id).where(
@@ -578,8 +605,6 @@ def create_app(test_config=None):
                     )
                 ).scalars().all()
             )
-        else:
-            liked_post_ids = set()
 
         return render_template(
             'publish.html',
@@ -591,13 +616,18 @@ def create_app(test_config=None):
         )
 
 
+
     @app.route('/uploads/<filename>')
     def uploaded_file(filename):
         return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
-    @app.route('/', methods=['GET', 'POST'])
+    @app.route('/dashboard', methods=['GET', 'POST'])
     @login_required
     def home():
+
+        filename = None 
+
+
         file = request.files.get('post_image')
 
         if file and file.filename != '' and allowed_file(file.filename):
@@ -665,10 +695,32 @@ def create_app(test_config=None):
 
         return render_template('login.html', error=error, welcome=welcome)
 
-    @app.route('/dashboard')
-    @login_required
-    def dashboard():
-        return render_template('index.html', user=current_user)
+
+    @app.route('/')
+    def landing():
+
+        # Get the four most recently published active events.
+        latest_events = db.session.execute(
+            db.select(Post, User)
+            .join(User, Post.user_id == User.id)
+            .where(
+                Post.published == True,
+                Post.status == "Active"
+            )
+            .order_by(Post.date.desc())
+            .limit(4)
+        ).all()
+
+        return render_template(
+            'landing.html',
+            latest_events=latest_events
+        )
+
+    
+    # @app.route('/dashboard')
+    # @login_required
+    # def dashboard():
+    #     return render_template('index.html', user=current_user)
 
     @app.route('/logout')
     @login_required

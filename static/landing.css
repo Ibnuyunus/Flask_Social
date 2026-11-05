@@ -1,0 +1,516 @@
+
+/* =========================================
+   EVENTLOG PUBLIC HOMEPAGE
+   File: static/landing.css
+   ========================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body.landing-page {
+    font-family: Arial, sans-serif;
+    background: #ffffff;
+    color: #172033;
+    line-height: 1.6;
+}
+
+.landing-page a {
+    text-decoration: none;
+}
+
+
+/* Navigation */
+
+.landing-header {
+    background: #ffffff;
+    border-bottom: 1px solid #e4e8f0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.landing-nav {
+    max-width: 1200px;
+    margin: auto;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.landing-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #172033;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.brand-icon {
+    background: #4f46e5;
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.landing-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+}
+
+.landing-nav-links a {
+    color: #687386;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.landing-nav-links a:hover,
+.landing-nav-links a.active {
+    color: #4f46e5;
+}
+
+.landing-nav-links .nav-signup {
+    background: #4f46e5;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+}
+
+.landing-nav-links .nav-signup:hover {
+    background: #4338ca;
+    color: white;
+}
+
+
+/* Hero */
+
+.hero-section {
+    max-width: 1200px;
+    margin: auto;
+    padding: 100px 24px;
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    align-items: center;
+    gap: 60px;
+    background: #ffffff;
+}
+
+.hero-label,
+.section-label {
+    color: #4f46e5;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+.hero-content h1 {
+    font-size: clamp(38px, 5vw, 58px);
+    line-height: 1.15;
+    margin: 18px 0;
+    letter-spacing: -1.5px;
+}
+
+.hero-content h1 span {
+    color: #4f46e5;
+}
+
+.hero-content > p {
+    color: #687386;
+    font-size: 16px;
+    max-width: 560px;
+    margin-bottom: 28px;
+}
+
+.hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    transition: 0.2s;
+}
+
+.btn-primary {
+    background: #4f46e5;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #4338ca;
+}
+
+.btn-secondary {
+    background: #eeedff;
+    color: #4f46e5;
+}
+
+.btn-secondary:hover {
+    background: #e1dfff;
+}
+
+.hero-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+    background: #f3f2ff;
+    border-radius: 24px;
+    padding: 30px;
+}
+
+.hero-card {
+    width: 100%;
+    max-width: 310px;
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 15px 40px rgba(23, 32, 51, 0.08);
+}
+
+.hero-card-icon {
+    width: 48px;
+    height: 48px;
+    background: #eeedff;
+    color: #4f46e5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.hero-card h3 {
+    margin-bottom: 8px;
+}
+
+.hero-card p {
+    color: #687386;
+    font-size: 14px;
+}
+
+.hero-card-line {
+    height: 9px;
+    background: #eef0f5;
+    border-radius: 10px;
+    margin-top: 22px;
+}
+
+.hero-card-line.short {
+    width: 65%;
+    margin-top: 10px;
+}
+
+
+/* About */
+
+.about-section {
+    padding: 85px 24px;
+    background: #f5f7fb;
+}
+
+.section-heading {
+    max-width: 650px;
+    margin: 0 auto 45px;
+    text-align: center;
+}
+
+.section-heading h2,
+.latest-heading h2 {
+    font-size: 34px;
+    margin: 10px 0;
+}
+
+.section-heading p,
+.latest-heading p {
+    color: #687386;
+}
+
+.about-grid {
+    max-width: 1100px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
+
+.about-card {
+    background: white;
+    padding: 30px;
+    border: 1px solid #e4e8f0;
+    border-radius: 14px;
+}
+
+.about-icon {
+    width: 46px;
+    height: 46px;
+    background: #eeedff;
+    color: #4f46e5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    font-size: 21px;
+    margin-bottom: 18px;
+}
+
+.about-card h3 {
+    margin-bottom: 8px;
+}
+
+.about-card p {
+    color: #687386;
+    font-size: 14px;
+}
+
+
+/* Latest Events */
+
+.latest-section {
+    max-width: 1200px;
+    margin: auto;
+    padding: 85px 24px;
+}
+
+.latest-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 20px;
+    margin-bottom: 35px;
+}
+
+.view-all {
+    color: #4f46e5;
+    font-weight: 700;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.view-all:hover {
+    color: #4338ca;
+}
+
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.event-card {
+    border: 1px solid #e4e8f0;
+    border-radius: 14px;
+    overflow: hidden;
+    background: white;
+    transition: 0.2s;
+}
+
+.event-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(23, 32, 51, 0.07);
+}
+
+.event-image,
+.event-placeholder,
+.event-file {
+    width: 100%;
+    height: 190px;
+}
+
+.event-image {
+    object-fit: cover;
+    display: block;
+}
+
+.event-placeholder,
+.event-file {
+    background: #f3f2ff;
+    color: #4f46e5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 28px;
+}
+
+.event-file {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.event-content {
+    padding: 22px;
+}
+
+.event-author {
+    color: #4f46e5;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.event-content h3 {
+    font-size: 20px;
+    margin: 9px 0;
+    overflow-wrap: anywhere;
+}
+
+.event-description {
+    color: #687386;
+    font-size: 14px;
+    margin-bottom: 20px;
+    overflow-wrap: anywhere;
+}
+
+.event-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    border-top: 1px solid #e4e8f0;
+    padding-top: 15px;
+    color: #8992a2;
+    font-size: 12px;
+}
+
+.event-footer a {
+    color: #4f46e5;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.empty-events {
+    background: #f5f7fb;
+    border-radius: 14px;
+    padding: 55px 20px;
+    text-align: center;
+}
+
+.empty-events p {
+    color: #687386;
+    margin: 8px 0 20px;
+}
+
+
+/* Call to Action */
+
+.cta-section {
+    background: #4f46e5;
+    color: white;
+    text-align: center;
+    padding: 75px 24px;
+}
+
+.cta-section h2 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.cta-section p {
+    color: #e0e0ff;
+    margin-bottom: 25px;
+}
+
+.btn-light {
+    background: white;
+    color: #4f46e5;
+}
+
+.btn-light:hover {
+    background: #eeedff;
+}
+
+
+/* Footer */
+
+.landing-footer {
+    background: #172033;
+    color: white;
+    text-align: center;
+    padding: 30px 20px;
+}
+
+.footer-brand {
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.landing-footer p {
+    color: #c2c8d3;
+    font-size: 14px;
+    margin: 7px 0;
+}
+
+.landing-footer span {
+    color: #8992a2;
+    font-size: 12px;
+}
+
+
+/* Responsive Design */
+
+@media (max-width: 800px) {
+    .hero-section {
+        grid-template-columns: 1fr;
+        padding-top: 70px;
+        gap: 40px;
+    }
+
+    .about-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .landing-nav {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .landing-nav-links {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 600px) {
+    .hero-content h1 {
+        font-size: 38px;
+    }
+
+    .events-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .latest-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .section-heading h2,
+    .latest-heading h2,
+    .cta-section h2 {
+        font-size: 27px;
+    }
+
+    .hero-section,
+    .latest-section {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+}
