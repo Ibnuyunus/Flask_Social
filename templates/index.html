@@ -260,11 +260,16 @@
                                             <a href="{{ url_for('edit', id=row.id) }}"
                                                class="action-edit">Edit</a>
 
-                                            <a href="{{ url_for('delete', id=row.id) }}"
-                                               class="action-delete"
-                                               onclick="return confirm('Are you sure you want to delete this post?');">
-                                                Delete
-                                            </a>
+                                            <form method="POST"
+                                                action="{{ url_for('delete', id=row.id) }}"
+                                                onsubmit="return confirm('Are you sure you want to delete this post?');"
+                                                style="display: inline;">
+
+                                                <button type="submit" class="action-delete">
+                                                    Delete
+                                                </button>
+
+                                            </form>
 
                                             {% if not row.published %}
                                                 <a href="{{ url_for('publish', id=row.id) }}"

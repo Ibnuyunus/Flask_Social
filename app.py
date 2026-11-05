@@ -449,16 +449,23 @@ def create_app(test_config=None):
 
         return render_template('post.html', post=post)
 
-    @app.route('/delete/<int:id>')
+    @app.route('/delete/<int:id>', methods=['POST'])
     @login_required
     def delete(id):
-        post = Post.query.filter_by(id=id)
-        post = db.session.execute(post).scalar_one_or_none()
 
+        # Find the post using its ID.
+        post = db.session.get(Post, id)
+
+        # Check whether the post exists and belongs to the logged-in user.
+        if post is None or post.user_id != current_user.id:
+            abort(404)
+
+        # Soft-delete the post.
         post.status = "Deleted"
 
-        # db.session.delete(post)
         db.session.commit()
+
+        flash('Post deleted successfully.')
 
         return redirect(url_for('home'))
 
