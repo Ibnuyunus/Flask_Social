@@ -346,3 +346,249 @@ a {
         font-size: 12px;
     }
 }
+
+
+
+
+/* =================================
+   Updated People Page Navigation
+================================= */
+
+.top-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 20px;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 16px;
+    flex-wrap: nowrap;
+}
+
+.nav-links > a {
+    white-space: nowrap;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.people-user-profile {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #1e293b;
+    flex-shrink: 0;
+}
+
+.people-user-profile:hover {
+    color: #2563eb;
+}
+
+.people-user-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+@media (max-width: 850px) {
+    .top-nav {
+        flex-wrap: wrap;
+    }
+
+    .nav-links {
+        width: 100%;
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: 8px;
+        gap: 18px;
+    }
+}
+
+
+/* People page navigation: match Dashboard styling */
+.people-page .top-nav {
+    background: #ffffff;
+    border-bottom: 1px solid #e4e8f0;
+}
+
+.people-page .top-nav a {
+    text-decoration: none;
+}
+
+.people-page .nav-links a {
+    color: #687386;
+    padding: 9px 14px;
+    border-radius: 9px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.people-page .nav-links a:hover {
+    background: #eeedff;
+    color: #4f46e5;
+    text-decoration: none;
+}
+
+.people-page .nav-links a.active {
+    background: #eeedff;
+    color: #4f46e5;
+}
+
+.people-page .nav-links a.logout {
+    color: #dc2626;
+}
+
+.people-page .nav-links a.logout:hover {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+
+
+/* =================================
+   People Page Navigation
+   Matches Dashboard Styling
+================================= */
+
+.people-page .top-nav {
+    background: #ffffff;
+    min-height: 76px;
+    padding: 14px 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 20px;
+    border-bottom: 1px solid #e4e8f0;
+}
+
+.people-page .brand {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #172033;
+    flex-shrink: 0;
+    text-decoration: none;
+}
+
+.people-page .nav-links {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    flex-wrap: nowrap;
+}
+
+.people-page .nav-links > a {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    padding: 9px 12px;
+    border-radius: 9px;
+    color: #687386;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.people-page .nav-links > a:hover {
+    background: #eeedff;
+    color: #4f46e5;
+    text-decoration: none;
+}
+
+/* Active People link */
+.people-page .nav-links > a.active {
+    background: #eeedff;
+    color: #4f46e5;
+}
+
+/* Profile avatar and username */
+.people-page .people-user-profile {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #172033;
+    flex-shrink: 0;
+}
+
+.people-page .people-user-profile:hover {
+    background: #eeedff;
+    color: #4f46e5;
+}
+
+.people-page .people-user-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #eeedff;
+    color: #4f46e5;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+/* Logout */
+.people-page .nav-links > a.people-logout {
+    color: #dc2626;
+}
+
+.people-page .nav-links > a.people-logout:hover {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+/* Responsive navigation */
+@media (max-width: 900px) {
+    .people-page .top-nav {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .people-page .nav-links {
+        width: 100%;
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: 8px;
+        gap: 8px;
+    }
+
+    .people-page .nav-links > a {
+        flex-shrink: 0;
+    }
+}
+
+
+.notification-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    margin-left: 5px;
+    border-radius: 50px;
+    background: #ef4444;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+}

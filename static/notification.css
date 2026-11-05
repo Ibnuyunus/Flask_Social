@@ -206,3 +206,262 @@
         padding: 15px;
     }
 }
+
+
+
+/* =================================
+   DASHBOARD-ALIGNED NOTIFICATIONS
+================================= */
+
+.notifications-page {
+    --dash-primary: #4f46e5;
+    --dash-primary-hover: #4338ca;
+    --dash-bg: #f5f7fb;
+    --dash-surface: #ffffff;
+    --dash-text: #172033;
+    --dash-muted: #687386;
+    --dash-border: #e4e8f0;
+
+    background: var(--dash-bg);
+    color: var(--dash-text);
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+/* Navigation */
+
+.notifications-page .pub-header {
+    min-height: 76px;
+    padding: 14px 5%;
+    flex-wrap: nowrap;
+    background: var(--dash-surface);
+    border-bottom: 1px solid var(--dash-border);
+}
+
+.notifications-page .pub-brand {
+    color: var(--dash-text);
+    font-size: 1.4rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.notifications-page .pub-brand-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    background: var(--dash-primary);
+    font-weight: 800;
+}
+
+.notifications-page .pub-nav {
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    gap: 8px;
+}
+
+.notifications-page .pub-nav-link,
+.notifications-page .pub-current-page {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 14px;
+    border-radius: 9px;
+    color: var(--dash-muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.notifications-page .pub-nav-link:hover,
+.notifications-page .pub-current-page {
+    color: var(--dash-primary);
+    background: #eeedff;
+}
+
+.notifications-page .pub-user-profile {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    border-radius: 9px;
+    color: var(--dash-text);
+    white-space: nowrap;
+}
+
+.notifications-page .pub-user-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.notifications-page .pub-user-profile:hover {
+    background: #eeedff;
+}
+
+/* Main content */
+
+.notifications-main {
+    width: min(100% - 32px, 850px);
+    margin: 0 auto;
+    padding: 36px 0 50px;
+}
+
+.notifications-heading {
+    margin-bottom: 28px;
+}
+
+.notifications-heading h1 {
+    margin: 0 0 8px;
+    color: var(--dash-text);
+    font-size: clamp(1.7rem, 3vw, 2.3rem);
+    letter-spacing: -0.8px;
+}
+
+.notifications-heading p {
+    color: var(--dash-muted);
+}
+
+/* Notification cards */
+
+.notification-card {
+    padding: 22px;
+    border: 1px solid var(--dash-border);
+    border-radius: 16px;
+    background: var(--dash-surface);
+    box-shadow: 0 4px 14px rgba(31, 41, 55, 0.025);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.notification-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(31, 41, 55, 0.06);
+}
+
+.notification-avatar {
+    background: #eeedff;
+    color: var(--dash-primary);
+}
+
+.notification-content strong {
+    color: var(--dash-primary);
+}
+
+.notification-dot {
+    background: var(--dash-primary);
+}
+
+/* Empty state */
+
+.notifications-empty {
+    border: 1px dashed #cbd2e1;
+    border-radius: 16px;
+    background: #ffffff;
+}
+
+.notifications-empty .empty-icon {
+    background: #eeedff;
+    color: var(--dash-primary);
+}
+
+/* Footer */
+
+.notifications-footer {
+    border-top: 1px solid var(--dash-border);
+    background: #ffffff;
+    color: var(--dash-muted);
+}
+
+/* Responsive navigation */
+
+@media (max-width: 850px) {
+    .notifications-page .pub-header {
+        flex-wrap: wrap;
+    }
+
+    .notifications-page .pub-nav {
+        width: 100%;
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: 8px;
+        gap: 8px;
+    }
+}
+
+@media (max-width: 600px) {
+    .notifications-page .pub-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 14px;
+        padding: 17px 5%;
+    }
+
+    .notifications-page .pub-nav {
+        flex-wrap: nowrap;
+    }
+
+    .notifications-main {
+        margin: 0 auto;
+        padding-top: 25px;
+    }
+
+    .notification-card {
+        padding: 16px;
+    }
+}
+
+
+/* Remove default underlines from navigation links */
+.notifications-page .pub-header a {
+    text-decoration: none;
+}
+
+.notifications-page .pub-header a:hover {
+    text-decoration: none;
+}
+
+
+.notification-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    margin-left: 5px;
+    border-radius: 50px;
+    background: #ef4444;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+
+/* Mark all notifications as read */
+
+.mark-all-read-form {
+    margin-top: 16px;
+}
+
+.mark-all-read-btn {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    background: #4f46e5;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.mark-all-read-btn:hover {
+    background: #4338ca;
+}

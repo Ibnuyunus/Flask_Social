@@ -919,3 +919,106 @@
         animation-duration: 0.01ms !important;
     }
 }
+
+
+
+/* =================================
+   Updated Navigation Layout
+================================= */
+
+.pub-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: nowrap;
+}
+
+.pub-nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 16px;
+    flex-wrap: nowrap;
+    min-width: 0;
+}
+
+.pub-nav-link,
+.pub-user-profile {
+    white-space: nowrap;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.pub-user-profile {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #1e293b;
+    flex-shrink: 0;
+}
+
+.pub-user-profile:hover {
+    color: #2563eb;
+}
+
+.pub-user-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.pub-user-name {
+    white-space: nowrap;
+}
+
+.pub-logout {
+    flex-shrink: 0;
+}
+
+/* Smaller screens */
+
+@media (max-width: 850px) {
+    .pub-header {
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .pub-nav {
+        width: 100%;
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: 8px;
+        gap: 18px;
+    }
+
+    .pub-nav::-webkit-scrollbar {
+        height: 4px;
+    }
+}
+
+
+.notification-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    margin-left: 5px;
+    border-radius: 50px;
+    background: #ef4444;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+}

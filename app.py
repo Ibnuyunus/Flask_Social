@@ -107,6 +107,18 @@ def create_app(test_config=None):
         is_read = mapped_column(db.Boolean, default=False, nullable=False)
         date = mapped_column(db.String, nullable=False)
 
+    @app.context_processor
+    def inject_unread_notification_count():
+        unread_notification_count = 0
+
+        if current_user.is_authenticated:
+            unread_notification_count = Notification.query.filter_by(
+                recipient_id=current_user.id,
+                is_read=False).count()
+
+        return { 'unread_notification_count': unread_notification_count 
+        }
+
     @login_manager.user_loader
     def load_user(user_id):
         return db.session.get(User, int(user_id))
@@ -317,6 +329,32 @@ def create_app(test_config=None):
             'notification.html',
             notifications=notifications
         )
+
+
+    @app.route('/notifications/mark-all-read', methods=['POST'])
+    @login_required
+    def mark_all_notifications_read():
+
+        # Get only unread notifications belonging to the logged-in user
+        unread_notifications = Notification.query.filter_by(
+            recipient_id=current_user.id,
+            is_read=False
+        ).all()
+
+        if unread_notifications:
+
+            # Mark each unread notification as read
+            for notification in unread_notifications:
+                notification.is_read = True
+
+            db.session.commit()
+
+            flash('All notifications have been marked as read.')
+
+        else:
+            flash('You have no unread notifications.')
+
+        return redirect(url_for('notifications'))
 
 
     @app.route('/post/<int:id>/comment', methods=['POST'])

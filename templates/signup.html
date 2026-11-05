@@ -4,34 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up | PostLog</title>
-    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}"> -->
     <link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}">
 </head>
 <body class="auth-page">
-    <div class="table-wrapper">
-        <table>
-            <tr>
-                <th>Id</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
-                <th>Password</th>
-                <th>Email</th>
-                <th>Date & Time</th>
-            </tr>
-        {%-for row in eventsList-%}
-            <tr>
-                <td>{{row.id}}</td>
-                <td>{{row.Firstname}}</td>
-                <td>{{row.Lastname}}</td>
-                <td>{{row.Username}}</td>
-                <td class="hash-cell">{{row.Password}}</td>
-                <td>{{row.Email}}</td>
-                <td>{{row.date}}</td>
-            </tr>
-        {%-endfor-%}
-        </table>
-    </div>
     <h1>Sign Up</h1>
     <form method="POST">
         <label for="firstName">First Name:</label>
